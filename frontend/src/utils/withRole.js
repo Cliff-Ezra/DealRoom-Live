@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const withRole = (WrappedComponent, role) => {
   const WithRoleComponent = (props) => {
@@ -13,7 +13,7 @@ const withRole = (WrappedComponent, role) => {
       if (userRole !== role) {
         router.push(`/${userRole}`);
       }
-    }, []);
+    }, [router, role]); // Include router and role in the dependency array
 
     return <WrappedComponent {...props} />;
   };

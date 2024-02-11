@@ -122,7 +122,12 @@ export const OverviewSectorsInterest = (props) => {
               {chunkedData.map((chunk, chunkIndex) => (
                 <TableRow key={chunkIndex}>
                   {chunk.map((row, rowIndex) => (
-                    <TableCell component="th" scope="row" style={{ textAlign: "center" }}>
+                    <TableCell
+                      key={rowIndex}
+                      component="th"
+                      scope="row"
+                      style={{ textAlign: "center" }}
+                    >
                       <Box
                         sx={{
                           display: "flex",
