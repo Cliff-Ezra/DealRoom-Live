@@ -5,7 +5,7 @@ import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
 import ClipboardDocumentIcon from "@heroicons/react/24/solid/ClipboardDocumentIcon";
 import FolderIcon from "@heroicons/react/24/solid/FolderIcon";
-import BankNotesIcon from "@heroicons/react/24/solid/BankNotesIcon";
+import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import ChartPieIcon from "@heroicons/react/24/solid/ChartPieIcon";
 import QuestionMarkCircleIcon from "@heroicons/react/24/solid/QuestionMarkCircleIcon";
 
@@ -160,7 +160,7 @@ export const adminItems = [
     path: "#",
     icon: (
       <SvgIcon fontSize="small">
-        <BankNotesIcon />
+        <CurrencyDollarIcon />
       </SvgIcon>
     ),
   },
