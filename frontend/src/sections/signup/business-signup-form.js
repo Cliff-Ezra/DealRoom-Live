@@ -312,7 +312,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Company Details
+                        <strong>Company Details</strong>
                       </Typography>
                     </Grid>
 
@@ -416,7 +416,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Representative Information
+                        <strong>Representative Information</strong>
                       </Typography>
                     </Grid>
 
@@ -473,7 +473,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        About your Business
+                        <strong>About your Business</strong>
                       </Typography>
                     </Grid>
 
@@ -673,7 +673,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Financial Information
+                        <strong>Financial Information</strong>
                       </Typography>
                     </Grid>
 
@@ -778,7 +778,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Funding Details
+                        <strong>Funding Details</strong>
                       </Typography>
                     </Grid>
 
@@ -834,7 +834,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Financing History
+                        <strong>Financing History</strong>
                       </Typography>
                     </Grid>
 
@@ -885,7 +885,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Business Landscape
+                        <strong>Business Landscape</strong>
                       </Typography>
                     </Grid>
 
@@ -961,7 +961,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Team & Assets
+                        <strong>Team & Assets</strong>
                       </Typography>
                     </Grid>
 
@@ -1065,7 +1065,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Operations & Market
+                        <strong>Operations & Market</strong>
                       </Typography>
                     </Grid>
 
@@ -1160,7 +1160,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Company Milestones
+                        <strong>Company Milestones</strong>
                       </Typography>
                     </Grid>
 
@@ -1201,7 +1201,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Legal & Compliance
+                        <strong>Legal & Compliance</strong>
                       </Typography>
                     </Grid>
 
@@ -1243,7 +1243,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Reference & Testimonials
+                        <strong>Reference & Testimonials</strong>
                       </Typography>
                     </Grid>
 
@@ -1289,7 +1289,7 @@ export const BusinessSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Contact & Communication
+                        <strong>Contact & Communication</strong>
                       </Typography>
                     </Grid>
 
@@ -1347,7 +1347,7 @@ export const BusinessSignupForm = () => {
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Documents & Media
+                        <strong>Documents & Media</strong>
                       </Typography>
                     </Grid>
 

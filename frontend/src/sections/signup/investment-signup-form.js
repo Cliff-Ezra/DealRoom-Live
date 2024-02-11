@@ -24,16 +24,34 @@ import {
   Radio,
   FormLabel,
   SvgIcon,
+  FormGroup,
+  Checkbox,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/CloseRounded";
 import UploadIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 
-const industries = [
-  { value: "education", label: "Education" },
-  { value: "construction", label: "Construction" },
-  { value: "health", label: "Health" },
-  { value: "finance", label: "Finance" },
+const investor_types = [
+  { value: "Individual", label: "Individual" },
+  { value: "Venture Capital", label: "Venture Capital" },
+  { value: "Angel Investor", label: "Angel Investor" },
+  { value: "Private Equity", label: "Private Equity" },
+  { value: "Institutional", label: "Institutional" },
   { value: "other", label: "Other" },
+];
+
+const experiences = [
+  { value: "Newbie", label: "Newbie" },
+  { value: "Few Investments", label: "Few Investments" },
+  { value: "Experienced", label: "Experienced" },
+  { value: "Veteran", label: "Veteran" },
+];
+
+const investments = [
+  { value: "PPP", label: "PPP" },
+  { value: "Joint Venture", label: "Joint Venture" },
+  { value: "Private Public", label: "Private Public" },
+  { value: "Equity Purchase", label: "Equity Purchase" },
+  { value: "Debt Financing", label: "Debt Financing" },
 ];
 
 const geo_locations = [
@@ -43,12 +61,49 @@ const geo_locations = [
   { value: "international", label: "International" },
 ];
 
-const com_methods = [
-  { value: "email", label: "Email" },
-  { value: "phone", label: "Phone" },
-  { value: "scheduled meeting", label: "Scheduled Meeting" },
-  { value: "in-person", label: "In-Person" },
-  { value: "other", label: "Other" },
+const project_statuses = [
+  { value: "Pre-Feasibility", label: "Pre-Feasibility" },
+  { value: "Feasibility Started", label: "Feasibility Started" },
+  { value: "Feasibility Completed", label: "Feasibility Completed" },
+];
+
+const timelines = [
+  { value: "Immediate (1-3 months)", label: "Immediate (1-3 months)" },
+  { value: "Short Term (3-6 months)", label: "Short Term (3-6 months)" },
+  { value: "Long Term (6-12 months+)", label: "Medium Term (6-12+ months+)" },
+];
+
+const return_investments = [
+  { value: "5-10%", label: "5-10%" },
+  { value: "10-20%", label: "10-20%" },
+  { value: "20-30%", label: "20-30%" },
+  { value: "30-40%", label: "30-40%" },
+  { value: "40-50%", label: "40-50%" },
+  { value: "50%+", label: "50%+" },
+];
+
+const risks = [
+  { value: "Low", label: "Low" },
+  { value: "Medium", label: "Medium" },
+  { value: "High", label: "High" },
+];
+
+const ranges = [
+  { value: "$10K-$50k", label: "$10K-$50k" },
+  { value: "$50K-$100k", label: "$50K-$100k" },
+  { value: "$100K-$500k", label: "$100K-$500k" },
+  { value: "$500K-$1M", label: "$500K-$1M" },
+  { value: "$1M-$5M", label: "$1M-$5M" },
+  { value: "$5M-$10M", label: "$5M-$10M" },
+  { value: "$10M+", label: "$10M+" },
+];
+
+const sources = [
+  { value: "Online Ad", label: "Online Ad" },
+  { value: "Social Media", label: "Social Media" },
+  { value: "Referral", label: "Referral" },
+  { value: "Event", label: "Event" },
+  { value: "Other", label: "Other" },
 ];
 
 const rep_titles = [
@@ -75,16 +130,11 @@ const investment_types = [
   { value: "other", label: "Other" },
 ];
 
-const project_statuses = [
-  { value: "pre feasibility", label: "Pre-Feasibility" },
-  { value: "feasibility started", label: "Feasibility Started" },
-  { value: "feasibility completed", label: "Feasibility Completed" },
-];
-
 export const InvestmentSignupForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [relevant_docs, setRelevantDocs] = useState([]);
+  const [funds_docs, setFundsDocs] = useState([]);
+  const [environment_doc, setEnvironmentDoc] = useState([]);
   const [img_videos_opportunity, setImgVideosOpportunity] = useState([]);
   const router = useRouter();
 
@@ -99,13 +149,23 @@ export const InvestmentSignupForm = () => {
   };
 
   // Relevant docs handler function
+  const handleEnvDocumentChange = (event) => {
+    const files = event.target.files;
+    setEnvironmentDoc((prevAttachments) => [...prevAttachments, ...Array.from(files)]);
+  };
+
+  const handleEnvDocumentRemove = (index) => {
+    setEnvironmentDoc((prevAttachments) => prevAttachments.filter((_, i) => i !== index));
+  };
+
+  // Relevant docs handler function
   const handleAttachmentsChange = (event) => {
     const files = event.target.files;
-    setRelevantDocs((prevAttachments) => [...prevAttachments, ...Array.from(files)]);
+    setFundsDocs((prevAttachments) => [...prevAttachments, ...Array.from(files)]);
   };
 
   const handleAttachmentRemove = (index) => {
-    setRelevantDocs((prevAttachments) => prevAttachments.filter((_, i) => i !== index));
+    setFundsDocs((prevAttachments) => prevAttachments.filter((_, i) => i !== index));
   };
 
   // Images/videos handler function
@@ -123,90 +183,100 @@ export const InvestmentSignupForm = () => {
 
   // Validation schema
   const validationSchema = Yup.object().shape({
-    opportunity_name: Yup.string().required("Opportunity name is required"),
-    industry: Yup.string().required("Industry is required"),
-    contact_name: Yup.string().required("Contact name is required"),
-    contact_email: Yup.string()
+    investor_name: Yup.string().required("Opportunity name is required"),
+    investor_email: Yup.string()
       .email("Invalid email address")
-      .required("Contact email is required"),
-    rep_title: Yup.string().required("Your title is required"),
-    other: Yup.string().required("Other is required"),
+      .required("Investor Email is required"),
+    investor_phone: Yup.string()
+      .required("Investor Phone is required")
+      .matches(
+        /^\+\d{3} \d{9}$/,
+        "Phone number is not valid. It should match the format: '+256 723329485'"
+      ),
+    investor_type: Yup.string().required("Investor type is required"),
+    experience: Yup.string().required("Experience is required"),
+    investment_portfolio: Yup.string().required("Investment Portfolio is required"),
 
-    project_type: Yup.string().required("Project type is required"),
     investment_type: Yup.string().required("Investment type is required"),
-    project_status: Yup.string().required("Project status is required"),
-    executive_summary: Yup.string().required("Executive summary is required"),
-    problem_addressed: Yup.string().required("Problem addressed is required"),
-    solution: Yup.string().required("Solution is required"),
-    target_market: Yup.string().required("Target Market is required"),
+    geo_operation: Yup.string().required("Geographic preference is required"),
+    investment_industry: Yup.object().test(
+      "at-least-one-true",
+      "You must select at least one industry/sector",
+      (value) => Object.values(value).some((v) => v === true)
+    ),
+    project_type: Yup.object().test(
+      "at-least-one-true",
+      "You must select at least one project type",
+      (value) => Object.values(value).some((v) => v === true)
+    ),
+    timeline_preference: Yup.string().required("Timeline preference is required"),
+    return_on_investment: Yup.string().required("Return on investment is required"),
+    risk_tolerance: Yup.string().required("Risk tolerance is required"),
 
-    est_initial_investment: Yup.number()
-      .min(0, "Estimated initial investment cannot be negative")
-      .required("Estimated initial investment is required"),
-    proj_revenue: Yup.number()
-      .min(0, "Revenue cannot be negative")
-      .required("Projected revenue is required"),
-    proj_net_profit: Yup.number()
-      .min(0, "Net profit cannot be negative")
-      .required("Projected net profit is required"),
-    break_even: Yup.string().required("Break even point is required"),
+    investment_range: Yup.string().required("Investment range is required"),
+    investment_cap: Yup.number()
+      .min(0, "Investment cap cannot be negative")
+      .required("Investment cap is required"),
+    comm_method: Yup.object().test(
+      "at-least-one-true",
+      "You must select at least one communication method",
+      (value) => Object.values(value).some((v) => v === true)
+    ),
+    referral_source: Yup.string().required("Referral source is required"),
+    special_requests: Yup.string().required("Special requests is required"),
 
-    market_research: Yup.string().required("Market research is required"),
-    environment_impact: Yup.string().required("Growth opportunities is required"),
-    compliance: Yup.string().required("Compliance is required"),
-    available_assets: Yup.string().required("Available assets is required"),
-    key_partnerships: Yup.string().required("Key partnerships is required"),
-    scalability: Yup.string().required("Scalability is required"),
-    risk_mitigation: Yup.string().required("Risk mitigation is required"),
-
-    comm_method: Yup.string().required("Preferred Communication method is required"),
+    terms_and_conditions: Yup.bool().oneOf([true], "You must agree to the terms and conditions"),
+    risk_agreement: Yup.bool().oneOf([true], "You must agree to the risk agreement"),
   });
 
   // Submission logic
   const handleSubmit = (values) => {
     // Create a variable to store the submitted data
     const formData = new FormData();
-    formData.append("opportunity_name", values.opportunity_name);
-    formData.append("industry", values.industry);
-    formData.append("contact_name", values.contact_name);
-    formData.append("contact_email", values.contact_email);
-    formData.append("rep_title", values.rep_title);
-    formData.append("other", values.other);
+    formData.append("investor_name", values.investor_name);
+    formData.append("investor_email", values.investor_email);
+    formData.append("investor_phone", values.investor_phone);
+    formData.append("investor_type", values.investor_type);
+    formData.append("experience", values.experience);
+    formData.append("investment_portfolio", values.investment_portfolio);
 
-    formData.append("project_type", values.project_type);
     formData.append("investment_type", values.investment_type);
-    formData.append("project_status", values.project_status);
-    formData.append("executive_summary", values.executive_summary);
-    formData.append("problem_addressed", values.problem_addressed);
-    formData.append("solution", values.solution);
-    formData.append("target_market", values.target_market);
+    formData.append("geo_operation", values.geo_operation);
+    // Append each selected industry/sector
+    Object.entries(values.investment_industry).forEach(([key, value]) => {
+      if (value) {
+        formData.append("investment_industry", key);
+      }
+    });
+    // Append each selected project type
+    Object.entries(values.project_type).forEach(([key, value]) => {
+      if (value) {
+        formData.append("project_type", key);
+      }
+    });
+    formData.append("timeline_preference", values.timeline_preference);
+    formData.append("return_on_investment", values.return_on_investment);
+    formData.append("risk_tolerance", values.risk_tolerance);
 
-    formData.append("est_initial_investment", values.est_initial_investment);
-    formData.append("proj_revenue", values.proj_revenue);
-    formData.append("proj_net_profit", values.proj_net_profit);
-    formData.append("break_even", values.break_even);
-
-    formData.append("market_research", values.market_research);
-    formData.append("environment_impact", values.environment_impact);
-    formData.append("compliance", values.compliance);
-    formData.append("available_assets", values.available_assets);
-    formData.append("key_partnerships", values.key_partnerships);
-    formData.append("scalability", values.scalability);
-    formData.append("risk_mitigation", values.risk_mitigation);
-
-    formData.append("comm_method", values.com_methods);
-
+    formData.append("investment_range", values.investment_range);
+    formData.append("investment_cap", values.investment_cap);
     // Append relevant docs
-    for (let i = 0; i < relevant_docs.length; i++) {
-      formData.append(`relevant_doc${i}`, relevant_docs[i]);
+    for (let i = 0; i < funds_docs.length; i++) {
+      formData.append(`funds_doc${i}`, funds_docs[i]);
     }
+    // Append each selected communication method
+    Object.entries(values.comm_method).forEach(([key, value]) => {
+      if (value) {
+        formData.append("comm_method", key);
+      }
+    });
+    formData.append("referral_source", values.referral_source);
+    formData.append("special_requests", values.special_requests);
 
-    // Append images/videos
-    for (let i = 0; i < img_videos_opportunity.length; i++) {
-      formData.append(`img_videos_opportunity${i}`, img_videos_opportunity[i]);
-    }
+    formData.append("terms_and_conditions", values.terms_and_conditions);
+    formData.append("risk_agreement", values.risk_agreement);
 
-    console.log("Submitted business data:", formData);
+    console.log("Submitted investor data:", formData);
 
     // axios
     //   .post("/clients", businessData)
@@ -223,7 +293,7 @@ export const InvestmentSignupForm = () => {
   return (
     <Card>
       <CardHeader
-        title="Investment Information"
+        title="Investment Signup Information"
         sx={{
           backgroundColor: "#1E2530",
           color: "white",
@@ -240,35 +310,44 @@ export const InvestmentSignupForm = () => {
         <Box sx={{ m: -1.5 }}>
           <Formik
             initialValues={{
-              opportunity_name: "",
-              industry: "",
-              contact_name: "",
-              contact_email: "",
-              rep_title: "",
-              other: "",
+              investor_name: "",
+              investor_email: "",
+              investor_phone: "",
+              investor_type: "",
+              experience: "",
+              investment_portfolio: "",
 
-              project_type: "",
               investment_type: "",
-              project_status: "",
-              executive_summary: "",
-              problem_addressed: "",
-              solution: "",
-              target_market: "",
+              geo_operation: "",
+              investment_industry: {
+                Agriculture: false,
+                Technology: false,
+                Healthcare: false,
+                Real_Estate: false,
+              },
+              project_type: {
+                Greenfield: false,
+                Brownfield: false,
+                Expansion: false,
+              },
+              timeline_preference: "",
+              return_on_investment: "",
+              risk_tolerance: "",
 
-              est_initial_investment: "",
-              proj_revenue: "",
-              proj_net_profit: "",
-              break_even: "",
+              investment_range: "",
+              investment_cap: "",
+              comm_method: {
+                Email: false,
+                Phone: false,
+                In_Person_Meetings: false,
+                Video_Calls: false,
+                Other: false,
+              },
+              referral_source: "",
+              special_requests: "",
 
-              market_research: "",
-              environment_impact: "",
-              compliance: "",
-              available_assets: "",
-              key_partnerships: "",
-              scalability: "",
-              risk_mitigation: "",
-
-              comm_method: "",
+              terms_and_conditions: false,
+              risk_agreement: false,
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, validateForm }) => {
@@ -287,168 +366,180 @@ export const InvestmentSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Opportunity Details
+                        <strong>Investor Details</strong>
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
-                          (isSubmitted || touched.opportunity_name) &&
-                          Boolean(errors.opportunity_name)
+                          (isSubmitted || touched.investor_name) && Boolean(errors.investor_name)
                         }
                       >
-                        <Field fullWidth name="opportunity_name">
+                        <Field fullWidth name="investor_name">
                           {({ field }) => (
                             <TextField
                               {...field}
-                              label="Opportunity Name"
+                              label="Full Name/Firm Name"
                               error={
-                                (isSubmitted || touched.opportunity_name) &&
-                                Boolean(errors.opportunity_name)
+                                (isSubmitted || touched.investor_name) &&
+                                Boolean(errors.investor_name)
                               }
                             />
                           )}
                         </Field>
-                        {(isSubmitted || touched.opportunity_name) && errors.opportunity_name && (
-                          <FormHelperText>{errors.opportunity_name}</FormHelperText>
+                        {(isSubmitted || touched.investor_name) && errors.investor_name && (
+                          <FormHelperText>{errors.investor_name}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
-                        error={(isSubmitted || touched.industry) && Boolean(errors.industry)}
+                        error={
+                          (isSubmitted || touched.investor_email) && Boolean(errors.investor_email)
+                        }
                       >
-                        <Field
-                          id="industry-select"
-                          name="industry"
-                          as={TextField}
-                          select
-                          label="Sector/Industry"
-                          onChange={(event) => {
-                            setFieldValue("industry", event.target.value);
-                          }}
-                          error={(isSubmitted || touched.industry) && Boolean(errors.industry)}
-                        >
-                          {industries.map((industry) => (
-                            <MenuItem key={industry.value} value={industry.value}>
-                              {industry.label}
-                            </MenuItem>
-                          ))}
+                        <Field fullWidth name="investor_email">
+                          {({ field }) => (
+                            <TextField
+                              {...field}
+                              label="Email"
+                              error={
+                                (isSubmitted || touched.investor_email) &&
+                                Boolean(errors.investor_email)
+                              }
+                            />
+                          )}
                         </Field>
-                        {(isSubmitted || touched.industry) && errors.industry && (
-                          <FormHelperText>{errors.industry}</FormHelperText>
+                        {(isSubmitted || touched.investor_email) && errors.investor_email && (
+                          <FormHelperText>{errors.investor_email}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={4}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.investor_phone) && Boolean(errors.investor_phone)
+                        }
+                      >
+                        <Field fullWidth name="investor_phone">
+                          {({ field }) => (
+                            <TextField
+                              {...field}
+                              label="Phone Number"
+                              error={
+                                (isSubmitted || touched.investor_phone) &&
+                                Boolean(errors.investor_phone)
+                              }
+                            />
+                          )}
+                        </Field>
+                        {(isSubmitted || touched.investor_phone) && errors.investor_phone && (
+                          <FormHelperText>{errors.investor_phone}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
 
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Contact Information
+                        <strong>Investment Profile</strong>
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
-                          (isSubmitted || touched.contact_name) && Boolean(errors.contact_name)
+                          (isSubmitted || touched.investor_type) && Boolean(errors.investor_type)
                         }
-                      >
-                        <Field fullWidth name="contact_name">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Contact Name"
-                              error={
-                                (isSubmitted || touched.contact_name) &&
-                                Boolean(errors.contact_name)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.contact_name) && errors.contact_name && (
-                          <FormHelperText>{errors.contact_name}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.contact_email) && Boolean(errors.contact_email)
-                        }
-                      >
-                        <Field fullWidth name="contact_email">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Contact Email"
-                              error={
-                                (isSubmitted || touched.contact_email) &&
-                                Boolean(errors.contact_email)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.contact_email) && errors.contact_email && (
-                          <FormHelperText>{errors.contact_email}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Representative Information
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.rep_title) && Boolean(errors.rep_title)}
                       >
                         <Field
-                          id="rep_title-select"
-                          name="rep_title"
+                          id="investor-type-select"
+                          name="investor_type"
                           as={TextField}
                           select
-                          label="Your Title"
+                          label="Investor Type"
                           onChange={(event) => {
-                            setFieldValue("rep_title", event.target.value);
+                            setFieldValue("investor_type", event.target.value);
                           }}
-                          error={(isSubmitted || touched.rep_title) && Boolean(errors.rep_title)}
+                          error={
+                            (isSubmitted || touched.investor_type) && Boolean(errors.investor_type)
+                          }
                         >
-                          {rep_titles.map((title) => (
-                            <MenuItem key={title.value} value={title.value}>
-                              {title.label}
+                          {investor_types.map((inv_type) => (
+                            <MenuItem key={inv_type.value} value={inv_type.value}>
+                              {inv_type.label}
                             </MenuItem>
                           ))}
                         </Field>
-                        {(isSubmitted || touched.rep_title) && errors.rep_title && (
-                          <FormHelperText>{errors.rep_title}</FormHelperText>
+                        {(isSubmitted || touched.investor_type) && errors.investor_type && (
+                          <FormHelperText>{errors.investor_type}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
-                        error={(isSubmitted || touched.other) && Boolean(errors.other)}
+                        error={(isSubmitted || touched.experience) && Boolean(errors.experience)}
                       >
-                        <Field fullWidth name="other">
+                        <Field
+                          id="experience-select"
+                          name="experience"
+                          as={TextField}
+                          select
+                          label="Investment Experience"
+                          onChange={(event) => {
+                            setFieldValue("experience", event.target.value);
+                          }}
+                          error={(isSubmitted || touched.experience) && Boolean(errors.experience)}
+                        >
+                          {experiences.map((inv_type) => (
+                            <MenuItem key={inv_type.value} value={inv_type.value}>
+                              {inv_type.label}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                        {(isSubmitted || touched.experience) && errors.experience && (
+                          <FormHelperText>{errors.experience}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.investment_portfolio) &&
+                          Boolean(errors.investment_portfolio)
+                        }
+                      >
+                        <Field name="investment_portfolio">
                           {({ field }) => (
                             <TextField
                               {...field}
-                              label="Other"
-                              error={(isSubmitted || touched.other) && Boolean(errors.other)}
+                              label="Investment Portfolio"
+                              error={
+                                (isSubmitted || touched.investment_portfolio) &&
+                                Boolean(errors.investment_portfolio)
+                              }
+                              multiline
+                              rows={7}
+                              InputProps={{
+                                style: {
+                                  resize: "both",
+                                  maxWidth: "100%",
+                                  maxHeight: "100%",
+                                },
+                              }}
                             />
                           )}
                         </Field>
-                        {(isSubmitted || touched.other) && errors.other && (
-                          <FormHelperText>{errors.other}</FormHelperText>
-                        )}
+                        {(isSubmitted || touched.investment_portfolio) &&
+                          errors.investment_portfolio && (
+                            <FormHelperText>{errors.investment_portfolio}</FormHelperText>
+                          )}
                       </FormControl>
                     </Grid>
                   </Grid>
@@ -458,42 +549,11 @@ export const InvestmentSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        About the Opportunity
+                        <strong>Investment Preferences</strong>
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.project_type) && Boolean(errors.project_type)
-                        }
-                      >
-                        <Field
-                          id="project_type-select"
-                          name="project_type"
-                          as={TextField}
-                          select
-                          label="Project Type"
-                          onChange={(event) => {
-                            setFieldValue("project_type", event.target.value);
-                          }}
-                          error={
-                            (isSubmitted || touched.project_type) && Boolean(errors.project_type)
-                          }
-                        >
-                          {project_types.map((project) => (
-                            <MenuItem key={project.value} value={project.value}>
-                              {project.label}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                        {(isSubmitted || touched.project_type) && errors.project_type && (
-                          <FormHelperText>{errors.project_type}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
@@ -502,11 +562,11 @@ export const InvestmentSignupForm = () => {
                         }
                       >
                         <Field
-                          id="investment_type-select"
+                          id="investment-type-select"
                           name="investment_type"
                           as={TextField}
                           select
-                          label="Investment Type"
+                          label="Preferred Investment Type"
                           onChange={(event) => {
                             setFieldValue("investment_type", event.target.value);
                           }}
@@ -515,7 +575,7 @@ export const InvestmentSignupForm = () => {
                             Boolean(errors.investment_type)
                           }
                         >
-                          {investment_types.map((investment) => (
+                          {investments.map((investment) => (
                             <MenuItem key={investment.value} value={investment.value}>
                               {investment.label}
                             </MenuItem>
@@ -523,6 +583,37 @@ export const InvestmentSignupForm = () => {
                         </Field>
                         {(isSubmitted || touched.investment_type) && errors.investment_type && (
                           <FormHelperText>{errors.investment_type}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.geo_operation) && Boolean(errors.geo_operation)
+                        }
+                      >
+                        <Field
+                          id="location-select"
+                          name="geo_operation"
+                          as={TextField}
+                          select
+                          label="Geographic Operation"
+                          onChange={(event) => {
+                            setFieldValue("geo_operation", event.target.value);
+                          }}
+                          error={
+                            (isSubmitted || touched.geo_operation) && Boolean(errors.geo_operation)
+                          }
+                        >
+                          {geo_locations.map((geo_location) => (
+                            <MenuItem key={geo_location.value} value={geo_location.value}>
+                              {geo_location.label}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                        {(isSubmitted || touched.geo_operation) && errors.geo_operation && (
+                          <FormHelperText>{errors.geo_operation}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
@@ -559,131 +650,216 @@ export const InvestmentSignupForm = () => {
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.executive_summary) &&
-                          Boolean(errors.executive_summary)
-                        }
-                      >
-                        <Field name="executive_summary">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Correspondence Summary"
-                              error={
-                                (isSubmitted || touched.executive_summary) &&
-                                Boolean(errors.executive_summary)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.executive_summary) && errors.executive_summary && (
-                          <FormHelperText>{errors.executive_summary}</FormHelperText>
-                        )}
+                      <FormControl>
+                        <FormLabel id="demo-checkbox-group-label">
+                          Preferred Industry/Sector
+                        </FormLabel>
+                        <FormGroup>
+                          <Field name="investment_industry.Agriculture" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Agriculture"
+                              />
+                            )}
+                          </Field>
+                          <Field name="investment_industry.Technology" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Technology"
+                              />
+                            )}
+                          </Field>
+                          <Field name="investment_industry.Healthcare" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Healthcare"
+                              />
+                            )}
+                          </Field>
+                          <Field name="investment_industry.Real Estate" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Real Estate"
+                              />
+                            )}
+                          </Field>
+                        </FormGroup>
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} md={12}>
+                      <FormControl>
+                        <FormLabel id="demo-checkbox-group-label">Project Type</FormLabel>
+                        <FormGroup>
+                          <Field name="project_type.Greenfield" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Greenfield"
+                              />
+                            )}
+                          </Field>
+                          <Field name="project_type.Brownfield" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Brownfield"
+                              />
+                            )}
+                          </Field>
+                          <Field name="project_type.Expansion" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Expansion"
+                              />
+                            )}
+                          </Field>
+                        </FormGroup>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ my: 2 }}>
+                        <strong>Matching Preferences</strong>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
-                          (isSubmitted || touched.problem_addressed) &&
-                          Boolean(errors.problem_addressed)
+                          (isSubmitted || touched.timeline_preference) &&
+                          Boolean(errors.timeline_preference)
                         }
                       >
-                        <Field name="problem_addressed">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Problem Addressed/Need in the Market"
-                              error={
-                                (isSubmitted || touched.problem_addressed) &&
-                                Boolean(errors.problem_addressed)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
+                        <Field
+                          id="timeline-select"
+                          name="timeline_preference"
+                          as={TextField}
+                          select
+                          label="Ideal Timeline Preference"
+                          onChange={(event) => {
+                            setFieldValue("timeline_preference", event.target.value);
+                          }}
+                          error={
+                            (isSubmitted || touched.timeline_preference) &&
+                            Boolean(errors.timeline_preference)
+                          }
+                        >
+                          {timelines.map((timeline) => (
+                            <MenuItem key={timeline.value} value={timeline.value}>
+                              {timeline.label}
+                            </MenuItem>
+                          ))}
                         </Field>
-                        {(isSubmitted || touched.problem_addressed) && errors.problem_addressed && (
-                          <FormHelperText>{errors.problem_addressed}</FormHelperText>
-                        )}
+                        {(isSubmitted || touched.timeline_preference) &&
+                          errors.timeline_preference && (
+                            <FormHelperText>{errors.timeline_preference}</FormHelperText>
+                          )}
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.solution) && Boolean(errors.solution)}
-                      >
-                        <Field name="solution">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Proposed Solution/Venture"
-                              error={(isSubmitted || touched.solution) && Boolean(errors.solution)}
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.solution) && errors.solution && (
-                          <FormHelperText>{errors.solution}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
-                          (isSubmitted || touched.target_market) && Boolean(errors.target_market)
+                          (isSubmitted || touched.return_on_investment) &&
+                          Boolean(errors.return_on_investment)
                         }
                       >
-                        <Field name="target_market">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Target Market"
-                              error={
-                                (isSubmitted || touched.target_market) &&
-                                Boolean(errors.target_market)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
+                        <Field
+                          id="return-select"
+                          name="return_on_investment"
+                          as={TextField}
+                          select
+                          label="Return on Investment Expectation"
+                          onChange={(event) => {
+                            setFieldValue("return_on_investment", event.target.value);
+                          }}
+                          error={
+                            (isSubmitted || touched.return_on_investment) &&
+                            Boolean(errors.return_on_investment)
+                          }
+                        >
+                          {return_investments.map((return_investment) => (
+                            <MenuItem key={return_investment.value} value={return_investment.value}>
+                              {return_investment.label}
+                            </MenuItem>
+                          ))}
                         </Field>
-                        {(isSubmitted || touched.target_market) && errors.target_market && (
-                          <FormHelperText>{errors.target_market}</FormHelperText>
+                        {(isSubmitted || touched.return_on_investment) &&
+                          errors.return_on_investment && (
+                            <FormHelperText>{errors.return_on_investment}</FormHelperText>
+                          )}
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={4}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.risk_tolerance) && Boolean(errors.risk_tolerance)
+                        }
+                      >
+                        <Field
+                          id="risk-select"
+                          name="risk_tolerance"
+                          as={TextField}
+                          select
+                          label="Risk Tolerance"
+                          onChange={(event) => {
+                            setFieldValue("risk_tolerance", event.target.value);
+                          }}
+                          error={
+                            (isSubmitted || touched.risk_tolerance) &&
+                            Boolean(errors.risk_tolerance)
+                          }
+                        >
+                          {risks.map((risk) => (
+                            <MenuItem key={risk.value} value={risk.value}>
+                              {risk.label}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                        {(isSubmitted || touched.risk_tolerance) && errors.risk_tolerance && (
+                          <FormHelperText>{errors.risk_tolerance}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
@@ -694,410 +870,68 @@ export const InvestmentSignupForm = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ my: 2 }}>
-                        Financial Projections & Requirements
+                        <strong>Financial Information</strong>
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={6}>
                       <FormControl
                         fullWidth
                         error={
-                          (isSubmitted || touched.est_initial_investment) &&
-                          Boolean(errors.est_initial_investment)
+                          (isSubmitted || touched.investment_range) &&
+                          Boolean(errors.investment_range)
                         }
-                      >
-                        <Field fullWidth name="est_initial_investment">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Estimated Initial Investment"
-                              error={
-                                (isSubmitted || touched.est_initial_investment) &&
-                                Boolean(errors.est_initial_investment)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.est_initial_investment) &&
-                          errors.est_initial_investment && (
-                            <FormHelperText>{errors.est_initial_investment}</FormHelperText>
-                          )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.proj_revenue) && Boolean(errors.proj_revenue)
-                        }
-                      >
-                        <Field fullWidth name="proj_revenue">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Projected Revenue(First Year)"
-                              error={
-                                (isSubmitted || touched.proj_revenue) &&
-                                Boolean(errors.proj_revenue)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.proj_revenue) && errors.proj_revenue && (
-                          <FormHelperText>{errors.proj_revenue}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.proj_net_profit) &&
-                          Boolean(errors.proj_net_profit)
-                        }
-                      >
-                        <Field fullWidth name="proj_net_profit">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Projected Net Profit(First Year)"
-                              error={
-                                (isSubmitted || touched.proj_net_profit) &&
-                                Boolean(errors.proj_net_profit)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.proj_net_profit) && errors.proj_net_profit && (
-                          <FormHelperText>{errors.proj_net_profit}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.break_even) && Boolean(errors.break_even)}
-                      >
-                        <Field fullWidth name="break_even">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Break Even Point(in Months/Years)"
-                              error={
-                                (isSubmitted || touched.break_even) && Boolean(errors.break_even)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.break_even) && errors.break_even && (
-                          <FormHelperText>{errors.break_even}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                )}
-
-                {currentStep === 4 && (
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Feasibility & Studies
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.market_research) &&
-                          Boolean(errors.market_research)
-                        }
-                      >
-                        <Field name="market_research">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Preliminary Market Research"
-                              error={
-                                (isSubmitted || touched.market_research) &&
-                                Boolean(errors.market_research)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.market_research) && errors.market_research && (
-                          <FormHelperText>{errors.market_research}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.compliance) && Boolean(errors.compliance)}
-                      >
-                        <Field name="compliance">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Local Regulations & Compliance"
-                              error={
-                                (isSubmitted || touched.compliance) && Boolean(errors.compliance)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.compliance) && errors.compliance && (
-                          <FormHelperText>{errors.compliance}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.environment_impact) &&
-                          Boolean(errors.environment_impact)
-                        }
-                      >
-                        <Field name="environment_impact">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Environmental Impact"
-                              error={
-                                (isSubmitted || touched.environment_impact) &&
-                                Boolean(errors.environment_impact)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.environment_impact) &&
-                          errors.environment_impact && (
-                            <FormHelperText>{errors.environment_impact}</FormHelperText>
-                          )}
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Resources & Assets
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.risk_mitigation) &&
-                          Boolean(errors.risk_mitigation)
-                        }
-                      >
-                        <Field name="risk_mitigation">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Potential Risks & Mitigation"
-                              error={
-                                (isSubmitted || touched.risk_mitigation) &&
-                                Boolean(errors.risk_mitigation)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.risk_mitigation) && errors.risk_mitigation && (
-                          <FormHelperText>{errors.risk_mitigation}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.key_partnerships) &&
-                          Boolean(errors.key_partnerships)
-                        }
-                      >
-                        <Field name="key_partnerships">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Key Partnerships/Alliances"
-                              error={
-                                (isSubmitted || touched.key_partnerships) &&
-                                Boolean(errors.key_partnerships)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.key_partnerships) && errors.key_partnerships && (
-                          <FormHelperText>{errors.key_partnerships}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Growth & Expansion Potential
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.scalability) && Boolean(errors.scalability)}
-                      >
-                        <Field name="scalability">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Opportunity Scalability"
-                              error={
-                                (isSubmitted || touched.scalability) && Boolean(errors.scalability)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.scalability) && errors.scalability && (
-                          <FormHelperText>{errors.scalability}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.key_partnerships) &&
-                          Boolean(errors.key_partnerships)
-                        }
-                      >
-                        <Field name="key_partnerships">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Key Partnerships/Alliances"
-                              error={
-                                (isSubmitted || touched.key_partnerships) &&
-                                Boolean(errors.key_partnerships)
-                              }
-                              multiline
-                              rows={7}
-                              InputProps={{
-                                style: {
-                                  resize: "both",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                },
-                              }}
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.key_partnerships) && errors.key_partnerships && (
-                          <FormHelperText>{errors.key_partnerships}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                )}
-
-                {currentStep === 5 && (
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Contact & Communication
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={(isSubmitted || touched.comm_method) && Boolean(errors.comm_method)}
                       >
                         <Field
-                          id="industry-select"
-                          name="comm_method"
+                          id="timeline-select"
+                          name="investment_range"
                           as={TextField}
                           select
-                          label="Preferred Communication Method"
+                          label="Typical Investment Range"
                           onChange={(event) => {
-                            setFieldValue("comm_method", event.target.value);
+                            setFieldValue("investment_range", event.target.value);
                           }}
-                          error={(isSubmitted || touched.industry) && Boolean(errors.industry)}
+                          error={
+                            (isSubmitted || touched.investment_range) &&
+                            Boolean(errors.investment_range)
+                          }
                         >
-                          {com_methods.map((methods) => (
-                            <MenuItem key={methods.value} value={methods.value}>
-                              {methods.label}
+                          {ranges.map((range) => (
+                            <MenuItem key={range.value} value={range.value}>
+                              {range.label}
                             </MenuItem>
                           ))}
                         </Field>
-                        {(isSubmitted || touched.comm_method) && errors.comm_method && (
-                          <FormHelperText>{errors.comm_method}</FormHelperText>
+                        {(isSubmitted || touched.investment_range) && errors.investment_range && (
+                          <FormHelperText>{errors.investment_range}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body2" sx={{ my: 2 }}>
-                        Documents & Media
-                      </Typography>
+                    <Grid item xs={12} md={6} lg={6}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.investment_cap) && Boolean(errors.investment_cap)
+                        }
+                      >
+                        <Field fullWidth name="investment_cap">
+                          {({ field }) => (
+                            <TextField
+                              {...field}
+                              type="number"
+                              label="Maximum Investment Cap"
+                              error={
+                                (isSubmitted || touched.investment_cap) &&
+                                Boolean(errors.investment_cap)
+                              }
+                            />
+                          )}
+                        </Field>
+                        {(isSubmitted || touched.investment_cap) && errors.investment_cap && (
+                          <FormHelperText>{errors.investment_cap}</FormHelperText>
+                        )}
+                      </FormControl>
                     </Grid>
-
                     <Grid item xs={12} md={6} sx={{ mt: 1 }}>
                       <Button
                         component="label"
@@ -1109,20 +943,20 @@ export const InvestmentSignupForm = () => {
                         variant="contained"
                         style={{ backgroundColor: "rgb(233 233 236)", color: "black" }}
                       >
-                        Upload Relevant Documents
+                        Proof of Funds Documents (Optional)
                         <input
                           accept="image/jpeg,image/png,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
                           hidden
                           id="attachment-upload"
-                          name="relevant_docs"
+                          name="funds_docs"
                           onChange={handleAttachmentsChange}
                           type="file"
                           multiple
                         />
                       </Button>
-                      {relevant_docs.length > 0 && (
+                      {funds_docs.length > 0 && (
                         <ul>
-                          {relevant_docs.map((attachment, index) => (
+                          {funds_docs.map((attachment, index) => (
                             <li key={attachment.name}>
                               <Grid container alignItems="center">
                                 <Grid item xs>
@@ -1138,61 +972,209 @@ export const InvestmentSignupForm = () => {
                           ))}
                         </ul>
                       )}
-                      {!relevant_docs.length && errors.relevant_docs && (
-                        <FormHelperText sx={{ color: "red" }}>
-                          {errors.relevant_docs}
-                        </FormHelperText>
+                      {!funds_docs.length && errors.funds_docs && (
+                        <FormHelperText sx={{ color: "red" }}>{errors.funds_docs}</FormHelperText>
                       )}
                     </Grid>
-                    <Grid item xs={12} md={6} sx={{ mt: 1 }}>
-                      <Button
-                        component="label"
-                        startIcon={
-                          <SvgIcon fontSize="small">
-                            <UploadIcon />
-                          </SvgIcon>
+
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ my: 2 }}>
+                        <strong>Additional Information</strong>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <FormControl>
+                        <FormLabel id="demo-checkbox-group-label">Communication Method</FormLabel>
+                        <FormGroup>
+                          <Field name="comm_method.Email" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Email"
+                              />
+                            )}
+                          </Field>
+                          <Field name="comm_method.Phone" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Phone"
+                              />
+                            )}
+                          </Field>
+                          <Field name="comm_method.In_Person_Meetings" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="In-Person Meetings"
+                              />
+                            )}
+                          </Field>
+                          <Field name="comm_method.Video_Calls" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Video Calls"
+                              />
+                            )}
+                          </Field>
+                          <Field name="comm_method.Other" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="Other"
+                              />
+                            )}
+                          </Field>
+                        </FormGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={4}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.referral_source) &&
+                          Boolean(errors.referral_source)
                         }
-                        variant="contained"
-                        style={{ backgroundColor: "rgb(233 233 236)", color: "black" }}
                       >
-                        Images/Videos of the Opportunity
-                        <input
-                          accept="image/*,video/*"
-                          hidden
-                          id="attachment-upload"
-                          name="img_videos_opportunity"
-                          onChange={handleImgVideosChange}
-                          type="file"
-                          multiple
-                        />
-                      </Button>
-                      {img_videos_opportunity.length > 0 && (
-                        <Grid container spacing={2} sx={{ mt: 1 }}>
-                          {img_videos_opportunity.map((attachment, index) => (
-                            <Grid item key={index}>
-                              <Grid container direction="column" alignItems="center">
-                                <img
-                                  src={URL.createObjectURL(attachment)}
-                                  alt={attachment.name}
-                                  style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                                />
-                                <Typography variant="caption">{attachment.name}</Typography>
-                                <Button onClick={() => handleImgVideosRemove(index)} size="small">
-                                  <CloseIcon />
-                                </Button>
-                              </Grid>
-                            </Grid>
+                        <Field
+                          id="referral-select"
+                          name="referral_source"
+                          as={TextField}
+                          select
+                          label="Referral Source (How did you hear about DealRoom?)"
+                          onChange={(event) => {
+                            setFieldValue("referral_source", event.target.value);
+                          }}
+                          error={
+                            (isSubmitted || touched.referral_source) &&
+                            Boolean(errors.referral_source)
+                          }
+                        >
+                          {sources.map((source) => (
+                            <MenuItem key={source.value} value={source.value}>
+                              {source.label}
+                            </MenuItem>
                           ))}
-                        </Grid>
-                      )}
-                      {!img_videos_opportunity.length && errors.img_videos_opportunity && (
-                        <FormHelperText sx={{ color: "red" }}>
-                          {errors.img_videos_opportunity}
-                        </FormHelperText>
-                      )}
+                        </Field>
+                        {(isSubmitted || touched.referral_source) && errors.referral_source && (
+                          <FormHelperText>{errors.referral_source}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.special_requests) &&
+                          Boolean(errors.special_requests)
+                        }
+                      >
+                        <Field name="special_requests">
+                          {({ field }) => (
+                            <TextField
+                              {...field}
+                              label="Special Requests or Notes"
+                              error={
+                                (isSubmitted || touched.special_requests) &&
+                                Boolean(errors.special_requests)
+                              }
+                              multiline
+                              rows={7}
+                              InputProps={{
+                                style: {
+                                  resize: "both",
+                                  maxWidth: "100%",
+                                  maxHeight: "100%",
+                                },
+                              }}
+                            />
+                          )}
+                        </Field>
+                        {(isSubmitted || touched.special_requests) && errors.special_requests && (
+                          <FormHelperText>{errors.special_requests}</FormHelperText>
+                        )}
+                      </FormControl>
                     </Grid>
                   </Grid>
                 )}
+
+                {currentStep === 4 && (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ my: 2 }}>
+                        <strong>Legal & Compliance</strong>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <FormControl>
+                        <FormGroup>
+                          <Field name="terms_and_conditions" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="I agree to the terms and conditions"
+                              />
+                            )}
+                          </Field>
+                        </FormGroup>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <FormControl>
+                        <FormGroup>
+                          <Field name="risk_agreement" type="checkbox">
+                            {({ field, form }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={field.value}
+                                    onChange={() => form.setFieldValue(field.name, !field.value)}
+                                  />
+                                }
+                                label="I understand that all investments have inherent risks and have taken the necessary measures to understand those risks:"
+                              />
+                            )}
+                          </Field>
+                        </FormGroup>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                )}
+
                 <Divider sx={{ pt: 2 }} />
                 <CardActions sx={{ justifyContent: "flex-end" }}>
                   {currentStep > 1 && (
@@ -1200,7 +1182,7 @@ export const InvestmentSignupForm = () => {
                       Back
                     </Button>
                   )}
-                  {currentStep < 5 ? (
+                  {currentStep < 4 ? (
                     <Button variant="contained" type="button" onClick={handleNext}>
                       Next
                     </Button>

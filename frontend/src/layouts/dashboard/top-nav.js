@@ -23,6 +23,7 @@ const TOP_NAV_HEIGHT = 64;
 
 // Sample data for notifications
 const systemIcon = "/assets/avatars/avatar-neha-punita.png";
+
 const notifications = [
   {
     icon: systemIcon,
@@ -33,9 +34,9 @@ const notifications = [
   },
   {
     icon: systemIcon,
-    title: "Complete Investment Sign-Up Form",
-    message: "Sign-Up your Investment",
-    path: "signup/investment-signup",
+    title: "Complete Investment Opportunity Sign-Up Form",
+    message: "Register your Investment Opportunity",
+    path: "signup/investment-opportunity",
     timestamp: "Jan 21, 8:02 PM",
   },
   {
@@ -44,6 +45,13 @@ const notifications = [
     message: "Enter contacts affiliated with your business",
     path: null,
     timestamp: "Jan 18, 5:56 PM",
+  },
+  {
+    icon: systemIcon,
+    title: "Complete Investment Sign-Up Form",
+    message: "Register your Investment Profile",
+    path: "signup/investment-signup",
+    timestamp: "Feb 10, 8:02 PM",
   },
 ];
 

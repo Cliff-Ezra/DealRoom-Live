@@ -29,9 +29,9 @@ export const NotificationPopover = (props) => {
     },
     {
       icon: systemIcon,
-      title: "Complete Investment Sign-Up Form",
-      message: "Sign-Up your Investment",
-      path: "signup/investment-signup",
+      title: "Complete Investment Opportunity Sign-Up Form",
+      message: "Register your Investment Opportunity",
+      path: "signup/investment-opportunity",
       timestamp: "Jan 21, 8:02 PM",
     },
     {
@@ -40,6 +40,13 @@ export const NotificationPopover = (props) => {
       message: "Enter contacts affiliated with your business",
       path: null,
       timestamp: "Jan 18, 5:56 PM",
+    },
+    {
+      icon: systemIcon,
+      title: "Complete Investment Sign-Up Form",
+      message: "Register your Investment Profile",
+      path: "signup/investment-signup",
+      timestamp: "Feb 10, 8:02 PM",
     },
   ];
 

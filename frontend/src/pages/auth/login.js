@@ -32,7 +32,7 @@ const Page = () => {
         } else if (values.role === "business") {
           router.push("/business");
         } else if (values.role === "admin") {
-          router.push("/admin");
+          router.push("/administrator");
         }
       } catch (err) {
         helpers.setStatus({ success: false });

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Box, Divider, Drawer, Stack, Typography, useMediaQuery } from "@mui/material";
 import { Logo } from "src/components/logo";
 import { Scrollbar } from "src/components/scrollbar";
-import { businessItems, investmentItems } from "./config";
+import { businessItems, investmentItems, adminItems } from "./config";
 import { SideNavItem } from "./side-nav-item";
 
 export const SideNav = (props) => {
@@ -23,10 +23,10 @@ export const SideNav = (props) => {
     navItems = adminItems;
   }
 
-    // If navItems is not defined, don't render the component
-    if (!navItems) {
-      return null; 
-    }
+  // If navItems is not defined, don't render the component
+  if (!navItems) {
+    return null;
+  }
 
   let platformName;
   if (role === "investment") {
@@ -36,7 +36,7 @@ export const SideNav = (props) => {
     platformName = "Business Platform";
     navItems = businessItems;
   } else if (role === "admin") {
-    platformName = "Administrator";
+    platformName = "Admin Platform";
     navItems = adminItems;
   }
 

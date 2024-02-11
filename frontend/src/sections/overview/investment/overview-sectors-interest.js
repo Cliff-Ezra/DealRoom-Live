@@ -21,7 +21,7 @@ import { Chart } from "src/components/chart";
 import { useState } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
-const useChartOptions = () => {
+const useChartOptions = (tableData) => {
   const theme = useTheme();
   return {
     chart: {
@@ -32,10 +32,10 @@ const useChartOptions = () => {
       theme.palette.success.main,
       theme.palette.warning.main,
       theme.palette.error.main,
-      "#F79008",
+      "#D8D8D8",
       "#F1536E",
-      "#6F52E8",
       "#2BC155",
+      "#6F52E8",
     ],
     dataLabels: {
       enabled: false,
@@ -68,13 +68,18 @@ const useChartOptions = () => {
     },
     tooltip: {
       fillSeriesColor: false,
+      custom: ({ seriesIndex }) => {
+        // Look up the sector name in tableData using the series index
+        const sectorName = tableData[seriesIndex]?.sector;
+        return sectorName || "No sector";
+      },
     },
   };
 };
 
-export const OverviewRecentInteractions = (props) => {
+export const OverviewSectorsInterest = (props) => {
   const { chartSeries, sx, tableData = [] } = props;
-  const chartOptions = useChartOptions();
+  const chartOptions = useChartOptions(tableData);
   const [anchorEl, setAnchorEl] = useState(null);
   const [filter, setFilter] = useState("This Month");
 
@@ -89,47 +94,50 @@ export const OverviewRecentInteractions = (props) => {
     setAnchorEl(null);
   };
 
+  // Function to divide an array into chunks
+  const chunk = (arr, size) => {
+    return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+      arr.slice(i * size, i * size + size)
+    );
+  };
+
+  // Divide tableData into chunks of 3
+  const chunkedData = chunk(tableData, 3);
+
   return (
     <Card sx={sx}>
       <CardHeader
         title={
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            Top Investment Opportunities
-            <div>
-              <Button variant="contained" color="primary" onClick={handleClick}>
-                {filter}
-              </Button>
-              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={() => handleClose("This Month")}>This Month</MenuItem>
-                <MenuItem onClick={() => handleClose("This Year")}>This Year</MenuItem>
-              </Menu>
-            </div>
+            Sectors by Interest
           </Box>
         }
       />
       <Divider />
       <CardContent>
         <Chart height={150} options={chartOptions} series={chartSeries} type="donut" width="100%" />
-        <TableContainer component={Paper} sx={{ maxHeight: "250px", overflowY: "auto" }}>
+        <TableContainer component={Paper} sx={{ maxHeight: "250px", overflowY: "auto", mt: 4 }}>
           <Table sx={{ minWidth: 300 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Project Name</TableCell>
-                <TableCell align="right">Total Users</TableCell>
-                <TableCell align="right">Bounce Rate</TableCell>
-              </TableRow>
-            </TableHead>
             <TableBody>
-              {tableData.map((row, index) => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <FiberManualRecordIcon style={{ color: chartOptions.colors[index] }} />
-                      {row.name}
-                    </Box>
-                  </TableCell>
-                  <TableCell align="right">{row.users}</TableCell>
-                  <TableCell align="right">{row.bounceRate}</TableCell>
+              {chunkedData.map((chunk, chunkIndex) => (
+                <TableRow key={chunkIndex}>
+                  {chunk.map((row, rowIndex) => (
+                    <TableCell component="th" scope="row" style={{ textAlign: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <FiberManualRecordIcon
+                          style={{ color: chartOptions.colors[chunkIndex * 3 + rowIndex] }}
+                        />
+                        {row.sector}
+                      </Box>
+                    </TableCell>
+                  ))}
                 </TableRow>
               ))}
             </TableBody>
@@ -140,7 +148,7 @@ export const OverviewRecentInteractions = (props) => {
   );
 };
 
-OverviewRecentInteractions.propTypes = {
+OverviewSectorsInterest.propTypes = {
   chartSeries: PropTypes.array.isRequired,
   sx: PropTypes.object,
   tableData: PropTypes.array,

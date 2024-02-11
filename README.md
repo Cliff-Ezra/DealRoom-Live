@@ -2,7 +2,7 @@
 
 DealRoom is a dynamic matchmaking platform that connects potential investors with viable investment opportunities and businesses. It serves as a bridge between local businesses seeking investment or looking to sell and foreign/domestic investors seeking potential growth avenues.
 
-It can be accessed via the link [[DealRoom](https://dealroom-front.vercel.app/)]
+It can be accessed via the link [[DealRoom](https://deal-room-live.vercel.app/auth/login)]
 
 ## Primary Users
 
