@@ -1,17 +1,15 @@
 import ChartBarIcon from "@heroicons/react/24/solid/ChartBarIcon";
-import LinkIcon from "@heroicons/react/24/solid/LinkIcon";
-import EnvelopeIcon from "@heroicons/react/24/solid/EnvelopeIcon";
-import UserIcon from "@heroicons/react/24/solid/UserIcon";
-import CogIcon from "@heroicons/react/24/solid/CogIcon";
-import ClipboardDocumentIcon from "@heroicons/react/24/solid/ClipboardDocumentIcon";
-import FolderIcon from "@heroicons/react/24/solid/FolderIcon";
-import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import ChartPieIcon from "@heroicons/react/24/solid/ChartPieIcon";
+import ClipboardDocumentIcon from "@heroicons/react/24/solid/ClipboardDocumentIcon";
+import CogIcon from "@heroicons/react/24/solid/CogIcon";
+import EnvelopeIcon from "@heroicons/react/24/solid/EnvelopeIcon";
+import FolderIcon from "@heroicons/react/24/solid/FolderIcon";
+import LinkIcon from "@heroicons/react/24/solid/LinkIcon";
 import QuestionMarkCircleIcon from "@heroicons/react/24/solid/QuestionMarkCircleIcon";
-
-import { SvgIcon } from "@mui/material";
-import UserCircleIcon from "@heroicons/react/24/solid/UserCircleIcon";
+import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import UserCircleIcon from "@heroicons/react/24/solid/UserCircleIcon";
+import { SvgIcon } from "@mui/material";
 
 export const businessItems = [
   {
@@ -130,7 +128,7 @@ export const adminItems = [
   },
   {
     title: "Business Listings",
-    path: "#",
+    path: "/admin/opportunity",
     icon: (
       <SvgIcon fontSize="small">
         <ClipboardDocumentIcon />
@@ -139,28 +137,10 @@ export const adminItems = [
   },
   {
     title: "Investor Profiles",
-    path: "#",
+    path: "/admin/profile",
     icon: (
       <SvgIcon fontSize="small">
         <FolderIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "User Management",
-    path: "#",
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Financial Overview",
-    path: "#",
-    icon: (
-      <SvgIcon fontSize="small">
-        <CurrencyDollarIcon />
       </SvgIcon>
     ),
   },
@@ -170,6 +150,24 @@ export const adminItems = [
     icon: (
       <SvgIcon fontSize="small">
         <ChartPieIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "User Management",
+    path: "/admin/user",
+    icon: (
+      <SvgIcon fontSize="small">
+        <UserIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "Settings",
+    path: "#",
+    icon: (
+      <SvgIcon fontSize="small">
+        <CogIcon />
       </SvgIcon>
     ),
   },

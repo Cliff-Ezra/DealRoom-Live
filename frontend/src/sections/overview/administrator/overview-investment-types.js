@@ -104,9 +104,8 @@ export const OverviewInvestmentTypes = (props) => {
           <Table sx={{ minWidth: 300 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Project Name</TableCell>
-                <TableCell align="right">Total Users</TableCell>
-                <TableCell align="right">Bounce Rate</TableCell>
+                <TableCell>Investment Type</TableCell>
+                <TableCell align="right">Percentage</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -118,8 +117,7 @@ export const OverviewInvestmentTypes = (props) => {
                       {row.name}
                     </Box>
                   </TableCell>
-                  <TableCell align="right">{row.users}</TableCell>
-                  <TableCell align="right">{row.bounceRate}</TableCell>
+                  <TableCell align="right">{row.percentage}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

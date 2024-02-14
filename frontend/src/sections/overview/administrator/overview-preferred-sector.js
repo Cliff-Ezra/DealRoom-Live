@@ -131,7 +131,7 @@ export const OverviewPreferredSector = (props) => {
                       {row.sector}
                     </Box>
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>{chartSeries[rowIndex]}K</TableCell>
+                  <TableCell style={{ textAlign: "center" }}>{chartSeries[rowIndex]}%</TableCell>
                 </TableRow>
               ))}
             </TableBody>

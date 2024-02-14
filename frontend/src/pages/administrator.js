@@ -86,9 +86,9 @@ const Page = () => (
             <OverviewInvestmentTypes
               chartSeries={[63, 15, 22]}
               tableData={[
-                { name: "Equity", users: "532,384", bounceRate: "81.42%" },
-                { name: "Debt", users: "433,382", bounceRate: "72.23%" },
-                { name: "Joint Venture", users: "233,382", bounceRate: "92.23%" },
+                { name: "Equity", percentage: "52%" },
+                { name: "Debt", percentage: "33%" },
+                { name: "Joint Venture", percentage: "28%" },
               ]}
               sx={{ height: "100%" }}
             />
