@@ -1,7 +1,7 @@
 import { Tab, Tabs } from "@mui/material";
 import { useCallback, useState } from "react";
 import { ProfileContact } from "src/sections/profile/profile-contact";
-import { ProfileOpportunity } from "src/sections/profile/profile-opportunity";
+import { ProfilePreferences } from "src/sections/profile/profile-preferences";
 import { ProfileFinance } from "src/sections/profile/profile-finance";
 import { ProfilePassword } from "src/sections/profile/profile-password";
 import { ProfileAccount } from "src/sections/profile/profile-account";
@@ -24,7 +24,7 @@ export const ProfileForm = () => {
         scrollButtons="auto"
       >
         <Tab label="Contact Information" value="contact" />
-        <Tab label="Investment Opportunity" value="opportunity" />
+        <Tab label="Investor Preferences" value="preferences" />
         <Tab label="Financial Requirements" value="finance" />
         <Tab label="Security Settings" value="security" />
         <Tab label="Account Management" value="account" />
@@ -32,7 +32,7 @@ export const ProfileForm = () => {
 
       {method === "contact" && <ProfileContact />}
 
-      {method === "opportunity" && <ProfileOpportunity />}
+      {method === "preferences" && <ProfilePreferences />}
 
       {method === "finance" && <ProfileFinance />}
 

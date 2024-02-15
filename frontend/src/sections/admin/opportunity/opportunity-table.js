@@ -18,7 +18,6 @@ import {
   Dialog,
   DialogContent,
   Badge,
-  Typography
 } from "@mui/material";
 // Icon imports
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";

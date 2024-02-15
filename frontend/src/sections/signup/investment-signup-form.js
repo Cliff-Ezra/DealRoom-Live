@@ -106,30 +106,6 @@ const sources = [
   { value: "Other", label: "Other" },
 ];
 
-const rep_titles = [
-  { value: "founder", label: "Founder" },
-  { value: "co-founder", label: "Co-Founder" },
-  { value: "ceo", label: "CEO" },
-  { value: "cto", label: "CTO" },
-  { value: "cfo", label: "CFO" },
-  { value: "other", label: "Other" },
-];
-
-const project_types = [
-  { value: "greenfield", label: "Greenfield" },
-  { value: "expansion", label: "Expansion" },
-  { value: "acquisition", label: "Acquisition" },
-  { value: "refinance", label: "Refinance" },
-  { value: "other", label: "Other" },
-];
-
-const investment_types = [
-  { value: "ppp", label: "PPP" },
-  { value: "joint venture", label: "Joint Venture" },
-  { value: "private public", label: "Private Public" },
-  { value: "other", label: "Other" },
-];
-
 export const InvestmentSignupForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);

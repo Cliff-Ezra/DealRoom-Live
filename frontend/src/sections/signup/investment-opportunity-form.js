@@ -29,18 +29,26 @@ import CloseIcon from "@mui/icons-material/CloseRounded";
 import UploadIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 
 const industries = [
-  { value: "education", label: "Education" },
-  { value: "construction", label: "Construction" },
-  { value: "health", label: "Health" },
-  { value: "finance", label: "Finance" },
-  { value: "other", label: "Other" },
-];
-
-const geo_locations = [
-  { value: "local", label: "Local" },
-  { value: "regional", label: "Regional" },
-  { value: "national", label: "National" },
-  { value: "international", label: "International" },
+  { value: "Education", label: "Education" },
+  { value: "Construction", label: "Construction" },
+  { value: "Health", label: "Health" },
+  { value: "Finance", label: "Finance" },
+  { value: "Technology", label: "Technology" },
+  { value: "Agriculture", label: "Agriculture" },
+  { value: "Real Estate", label: "Real Estate" },
+  { value: "Manufacturing", label: "Manufacturing" },
+  { value: "Retail", label: "Retail" },
+  { value: "Hospitality and Tourism", label: "Hospitality and Tourism" },
+  { value: "Renewable Energy", label: "Renewable Energy" },
+  { value: "Transportation and Logistics", label: "Transportation and Logistics" },
+  { value: "Media and Entertainment", label: "Media and Entertainment" },
+  { value: "E-commerce", label: "E-commerce" },
+  { value: "Telecommunications", label: "Telecommunications" },
+  { value: "Biotechnology", label: "Biotechnology" },
+  { value: "Environmental Services", label: "Environmental Services" },
+  { value: "Food and Beverage", label: "Food and Beverage" },
+  { value: "Consulting", label: "Consulting" },
+  { value: "Legal Services", label: "Legal Services" },
 ];
 
 const com_methods = [
@@ -1062,10 +1070,7 @@ export const InvestmentOpportunityForm = () => {
                     <Grid item xs={12} md={12}>
                       <FormControl
                         fullWidth
-                        error={
-                          (isSubmitted || touched.key_assets) &&
-                          Boolean(errors.key_assets)
-                        }
+                        error={(isSubmitted || touched.key_assets) && Boolean(errors.key_assets)}
                       >
                         <Field name="key_assets">
                           {({ field }) => (
@@ -1073,8 +1078,7 @@ export const InvestmentOpportunityForm = () => {
                               {...field}
                               label="Key Business Assets"
                               error={
-                                (isSubmitted || touched.key_assets) &&
-                                Boolean(errors.key_assets)
+                                (isSubmitted || touched.key_assets) && Boolean(errors.key_assets)
                               }
                               multiline
                               rows={7}

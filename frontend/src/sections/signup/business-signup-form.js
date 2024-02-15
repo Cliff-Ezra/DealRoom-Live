@@ -29,11 +29,26 @@ import CloseIcon from "@mui/icons-material/CloseRounded";
 import UploadIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 
 const industries = [
-  { value: "education", label: "Education" },
-  { value: "construction", label: "Construction" },
-  { value: "health", label: "Health" },
-  { value: "finance", label: "Finance" },
-  { value: "other", label: "Other" },
+  { value: "Education", label: "Education" },
+  { value: "Construction", label: "Construction" },
+  { value: "Health", label: "Health" },
+  { value: "Finance", label: "Finance" },
+  { value: "Technology", label: "Technology" },
+  { value: "Agriculture", label: "Agriculture" },
+  { value: "Real Estate", label: "Real Estate" },
+  { value: "Manufacturing", label: "Manufacturing" },
+  { value: "Retail", label: "Retail" },
+  { value: "Hospitality and Tourism", label: "Hospitality and Tourism" },
+  { value: "Renewable Energy", label: "Renewable Energy" },
+  { value: "Transportation and Logistics", label: "Transportation and Logistics" },
+  { value: "Media and Entertainment", label: "Media and Entertainment" },
+  { value: "E-commerce", label: "E-commerce" },
+  { value: "Telecommunications", label: "Telecommunications" },
+  { value: "Biotechnology", label: "Biotechnology" },
+  { value: "Environmental Services", label: "Environmental Services" },
+  { value: "Food and Beverage", label: "Food and Beverage" },
+  { value: "Consulting", label: "Consulting" },
+  { value: "Legal Services", label: "Legal Services" },
 ];
 
 const geo_locations = [
@@ -166,9 +181,9 @@ export const BusinessSignupForm = () => {
     key_achievements: Yup.string().required("Key achievements is required"),
     legal_considerations: Yup.string().required("Legal considerations is required"),
     reference_testimonials: Yup.string().required("Reference & testimonials is required"),
+    exit_strategy: Yup.string(),
 
     comm_method: Yup.string().required("Preferred Communication method is required"),
-    exit_strategy: Yup.string(),
   });
 
   // Submission logic
@@ -209,9 +224,9 @@ export const BusinessSignupForm = () => {
     formData.append("key_achievements", values.key_achievements);
     formData.append("legal_considerations", values.legal_considerations);
     formData.append("reference_testimonials", values.reference_testimonials);
+    formData.append("exit_strategy", values.exit_strategy);
 
     formData.append("comm_method", values.com_methods);
-    formData.append("exit_strategy", values.exit_strategy);
 
     // Append relevant docs
     for (let i = 0; i < relevant_docs.length; i++) {
@@ -291,9 +306,9 @@ export const BusinessSignupForm = () => {
               key_achievements: "",
               legal_considerations: "",
               reference_testimonials: "",
+              exit_strategy: "",
 
               comm_method: "",
-              exit_strategy: "",
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, validateForm }) => {
@@ -1282,6 +1297,46 @@ export const BusinessSignupForm = () => {
                           )}
                       </FormControl>
                     </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ my: 2 }}>
+                        <strong>Exit Strategy</strong>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          (isSubmitted || touched.exit_strategy) && Boolean(errors.exit_strategy)
+                        }
+                      >
+                        <Field name="exit_strategy">
+                          {({ field }) => (
+                            <TextField
+                              {...field}
+                              label="Exit Strategy(Optional)"
+                              error={
+                                (isSubmitted || touched.exit_strategy) &&
+                                Boolean(errors.exit_strategy)
+                              }
+                              multiline
+                              rows={6}
+                              InputProps={{
+                                style: {
+                                  resize: "both",
+                                  maxWidth: "100%",
+                                  maxHeight: "100%",
+                                },
+                              }}
+                            />
+                          )}
+                        </Field>
+                        {(isSubmitted || touched.exit_strategy) && errors.exit_strategy && (
+                          <FormHelperText>{errors.exit_strategy}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
                   </Grid>
                 )}
 
@@ -1317,30 +1372,6 @@ export const BusinessSignupForm = () => {
                         </Field>
                         {(isSubmitted || touched.comm_method) && errors.comm_method && (
                           <FormHelperText>{errors.comm_method}</FormHelperText>
-                        )}
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControl
-                        fullWidth
-                        error={
-                          (isSubmitted || touched.exit_strategy) && Boolean(errors.exit_strategy)
-                        }
-                      >
-                        <Field fullWidth name="exit_strategy">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              label="Exit Strategy(Optional)"
-                              error={
-                                (isSubmitted || touched.exit_strategy) &&
-                                Boolean(errors.exit_strategy)
-                              }
-                            />
-                          )}
-                        </Field>
-                        {(isSubmitted || touched.exit_strategy) && errors.exit_strategy && (
-                          <FormHelperText>{errors.exit_strategy}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>

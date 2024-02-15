@@ -10,32 +10,34 @@ import {
   Stack,
   TextField,
   Grid,
+  MenuItem,
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
+import investment from "src/pages/investment";
 import * as Yup from "yup";
 
+const ranges = [
+  { value: "$10K-$50k", label: "$10K-$50k" },
+  { value: "$50K-$100k", label: "$50K-$100k" },
+  { value: "$100K-$500k", label: "$100K-$500k" },
+  { value: "$500K-$1M", label: "$500K-$1M" },
+  { value: "$1M-$5M", label: "$1M-$5M" },
+  { value: "$5M-$10M", label: "$5M-$10M" },
+  { value: "$10M+", label: "$10M+" },
+];
+
 const validationSchema = Yup.object().shape({
-  est_initial_investment: Yup.number()
-    .min(0, "Estimated initial investment cannot be negative")
-    .required("Estimated initial investment is required"),
-  proj_revenue: Yup.number()
-    .min(0, "Projected revenue cannot be negative")
-    .required("Projected revenue is required"),
-  proj_net_profit: Yup.number()
-    .min(0, "Projected net profit cannot be negative")
-    .required("Projected net profit is required"),
-  break_even: Yup.number()
-    .min(0, "Break even point cannot be negative")
-    .required("Break even point is required"),
+  investment_range: Yup.string().required("Investment range is required"),
+  investment_cap: Yup.number()
+    .min(0, "Investment cap cannot be negative")
+    .required("Investment cap is required"),
 });
 
 const handleSubmit = (values) => {
   const profileData = {
-    est_initial_investment: values.est_initial_investment,
-    proj_revenue: values.proj_revenue,
-    proj_net_profit: values.proj_net_profit,
-    break_even: values.break_even,
+    investment_range: values.investment_range,
+    investment_cap: values.investment_cap,
   };
 
   console.log("profileData", profileData);
@@ -56,10 +58,8 @@ export const ProfileFinance = () => {
   return (
     <Formik
       initialValues={{
-        est_initial_investment: "",
-        proj_revenue: "",
-        proj_net_profit: "",
-        break_even: "",
+        investment_range: "",
+        investment_cap: "",
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting, validateForm }) => {
@@ -83,96 +83,48 @@ export const ProfileFinance = () => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={6}>
-                  <FormControl
+                  <Field
+                    as={TextField}
+                    select
                     fullWidth
+                    name="investment_range"
+                    label="Project Status"
                     error={
-                      (isSubmitted || touched.est_initial_investment) &&
-                      Boolean(errors.est_initial_investment)
+                      (isSubmitted || touched.investment_range) && Boolean(errors.investment_range)
+                    }
+                    helperText={
+                      (isSubmitted || touched.investment_range) && errors.investment_range
                     }
                   >
-                    <Field fullWidth name="est_initial_investment">
-                      {({ field }) => (
-                        <TextField
-                          {...field}
-                          label="Estimated Initial Investment"
-                          error={
-                            (isSubmitted || touched.est_initial_investment) &&
-                            Boolean(errors.est_initial_investment)
-                          }
-                          type="number"
-                        />
-                      )}
-                    </Field>
-                    {(isSubmitted || touched.est_initial_investment) &&
-                      errors.est_initial_investment && (
-                        <FormHelperText>{errors.est_initial_investment}</FormHelperText>
-                      )}
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6} lg={6}>
-                  <FormControl
-                    fullWidth
-                    error={(isSubmitted || touched.proj_revenue) && Boolean(errors.proj_revenue)}
-                  >
-                    <Field fullWidth name="proj_revenue">
-                      {({ field }) => (
-                        <TextField
-                          {...field}
-                          label="Projected Revenue(First Year)"
-                          error={
-                            (isSubmitted || touched.proj_revenue) && Boolean(errors.proj_revenue)
-                          }
-                          type="number"
-                        />
-                      )}
-                    </Field>
-                    {(isSubmitted || touched.proj_revenue) && errors.proj_revenue && (
-                      <FormHelperText>{errors.proj_revenue}</FormHelperText>
-                    )}
-                  </FormControl>
+                    {ranges.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Field>
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
                   <FormControl
                     fullWidth
                     error={
-                      (isSubmitted || touched.proj_net_profit) && Boolean(errors.proj_net_profit)
+                      (isSubmitted || touched.investment_cap) && Boolean(errors.investment_cap)
                     }
                   >
-                    <Field fullWidth name="proj_net_profit">
+                    <Field fullWidth name="investment_cap">
                       {({ field }) => (
                         <TextField
                           {...field}
-                          label="Projected Net Profit(First Year)"
+                          label="Maximum Investment Cap"
                           error={
-                            (isSubmitted || touched.proj_net_profit) &&
-                            Boolean(errors.proj_net_profit)
+                            (isSubmitted || touched.investment_cap) &&
+                            Boolean(errors.investment_cap)
                           }
                           type="number"
                         />
                       )}
                     </Field>
-                    {(isSubmitted || touched.proj_net_profit) && errors.proj_net_profit && (
-                      <FormHelperText>{errors.proj_net_profit}</FormHelperText>
-                    )}
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6} lg={6}>
-                  <FormControl
-                    fullWidth
-                    error={(isSubmitted || touched.break_even) && Boolean(errors.break_even)}
-                  >
-                    <Field fullWidth name="break_even">
-                      {({ field }) => (
-                        <TextField
-                          {...field}
-                          label="Break Even Point(in Months/Years)"
-                          error={(isSubmitted || touched.break_even) && Boolean(errors.break_even)}
-                          type="number"
-                        />
-                      )}
-                    </Field>
-                    {(isSubmitted || touched.break_even) && errors.break_even && (
-                      <FormHelperText>{errors.break_even}</FormHelperText>
+                    {(isSubmitted || touched.investment_cap) && errors.investment_cap && (
+                      <FormHelperText>{errors.investment_cap}</FormHelperText>
                     )}
                   </FormControl>
                 </Grid>

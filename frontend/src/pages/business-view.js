@@ -260,10 +260,8 @@ const Page = () => {
         </Container>
       </Box>
       {/* Interest Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="false">
-        {/* <DialogContent sx={{ minWidth: "50vw" }}> */}
-          <InterestForm setOpen={setOpen} />
-        {/* </DialogContent> */}
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
+        <InterestForm setOpen={setOpen} />
       </Dialog>
     </>
   );

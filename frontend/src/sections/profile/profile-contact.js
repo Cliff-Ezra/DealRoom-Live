@@ -16,12 +16,22 @@ import { useState } from "react";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  contact_email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+  investor_email: Yup.string()
+    .email("Must be a valid email")
+    .max(255)
+    .required("Email is required"),
+  investor_phone: Yup.string()
+    .required("Investor Phone is required")
+    .matches(
+      /^\+\d{3} \d{9}$/,
+      "Phone number is not valid. It should match the format: '+256 723329485'"
+    ),
 });
 
 const handleSubmit = (values) => {
   const profileData = {
-    contact_email: values.contact_email,
+    investor_email: values.investor_email,
+    investor_phone: values.investor_phone,
   };
 
   console.log("profileData", profileData);
@@ -41,7 +51,7 @@ export const ProfileContact = () => {
 
   return (
     <Formik
-      initialValues={{ contact_email: "" }}
+      initialValues={{ investor_email: "", investor_phone: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting, validateForm }) => {
         setIsSubmitted(true);
@@ -63,21 +73,48 @@ export const ProfileContact = () => {
                 <Grid item xs={12} md={6} lg={6}>
                   <FormControl
                     fullWidth
-                    error={(isSubmitted || touched.contact_email) && Boolean(errors.contact_email)}
+                    error={
+                      (isSubmitted || touched.investor_email) && Boolean(errors.investor_email)
+                    }
                   >
-                    <Field fullWidth name="contact_email">
+                    <Field fullWidth name="investor_email">
                       {({ field }) => (
                         <TextField
                           {...field}
                           label="Contact Email"
                           error={
-                            (isSubmitted || touched.contact_email) && Boolean(errors.contact_email)
+                            (isSubmitted || touched.investor_email) &&
+                            Boolean(errors.investor_email)
                           }
                         />
                       )}
                     </Field>
-                    {(isSubmitted || touched.contact_email) && errors.contact_email && (
-                      <FormHelperText>{errors.contact_email}</FormHelperText>
+                    {(isSubmitted || touched.investor_email) && errors.investor_email && (
+                      <FormHelperText>{errors.investor_email}</FormHelperText>
+                    )}
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                  <FormControl
+                    fullWidth
+                    error={
+                      (isSubmitted || touched.investor_phone) && Boolean(errors.investor_phone)
+                    }
+                  >
+                    <Field fullWidth name="investor_phone">
+                      {({ field }) => (
+                        <TextField
+                          {...field}
+                          label="Phone Number"
+                          error={
+                            (isSubmitted || touched.investor_phone) &&
+                            Boolean(errors.investor_phone)
+                          }
+                        />
+                      )}
+                    </Field>
+                    {(isSubmitted || touched.investor_phone) && errors.investor_phone && (
+                      <FormHelperText>{errors.investor_phone}</FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
