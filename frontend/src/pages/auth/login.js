@@ -110,19 +110,19 @@ const Page = () => {
               </Stack>
               <Button
                 variant="contained"
-                color={formik.values.role === "investment" ? "primary" : "secondary"}
-                onClick={() => handleRoleChange("investment")}
+                color={formik.values.role === "business" ? "primary" : "secondary"}
+                onClick={() => handleRoleChange("business")}
                 sx={{ mt: 3 }}
               >
-                Investment
+                Business
               </Button>
               <Button
                 variant="contained"
-                color={formik.values.role === "business" ? "primary" : "secondary"}
-                onClick={() => handleRoleChange("business")}
-                sx={{ ml: 2, mt: 3 }}
+                color={formik.values.role === "investment" ? "primary" : "secondary"}
+                onClick={() => handleRoleChange("investment")}
+                sx={{  ml: 2, mt: 3 }}
               >
-                Business
+                Investment
               </Button>
               <Button
                 variant="contained"

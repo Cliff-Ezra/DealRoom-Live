@@ -46,7 +46,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <ProfileTable
-              matches={[
+              profiles={[
                 {
                   name: "Emma Johnson",
                   location: "Kigali",
@@ -73,7 +73,7 @@ const Page = () => {
                 },
                 {
                   name: "Alex Uwimana",
-                  location: "Kigali",
+                  location: "Uganda",
                   range: "$75,000 - $125,000",
                   interest: "Real Estate Development",
                   contact: "investor3@wxample.com",
@@ -89,7 +89,7 @@ const Page = () => {
                 },
                 {
                   name: "Felicia Uwase",
-                  location: "Kigali",
+                  location: "Kenya",
                   range: "$80,000 - $150,000",
                   interest: "Healthcare",
                   contact: "investor5@wxample.com",

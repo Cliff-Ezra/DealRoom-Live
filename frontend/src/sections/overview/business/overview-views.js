@@ -1,9 +1,7 @@
-import PropTypes from "prop-types";
 import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
 import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
-import ArrowTrendingUpIcon from "@heroicons/react/24/solid/ArrowTrendingUpIcon";
-// import ArrowUp from '@heroicons/react/outline/ArrowUpIcon';
-import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 
 export const OverviewViews = (props) => {
   const { difference, positive = false, sx, value } = props;
@@ -18,17 +16,6 @@ export const OverviewViews = (props) => {
             </Typography>
             <Typography variant="h4">{value}</Typography>
           </Stack>
-          <Avatar
-            sx={{
-              backgroundColor: "success.main",
-              height: 56,
-              width: 56,
-            }}
-          >
-            <SvgIcon>
-              <ArrowTrendingUpIcon />
-            </SvgIcon>
-          </Avatar>
         </Stack>
         {difference && (
           <Stack alignItems="center" direction="row" spacing={2} sx={{ mt: 2 }}>

@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
 import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
 import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
-import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
+import PropTypes from "prop-types";
 // import ArrowUp from '@heroicons/react/outline/ArrowUpIcon';
-import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
+import { Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 
 export const OverviewInvestedAmount = (props) => {
   const { difference, positive = false, sx, value } = props;
@@ -18,17 +17,6 @@ export const OverviewInvestedAmount = (props) => {
             </Typography>
             <Typography variant="h4">{value}</Typography>
           </Stack>
-          <Avatar
-            sx={{
-              backgroundColor: "success.main",
-              height: 56,
-              width: 56,
-            }}
-          >
-            <SvgIcon>
-              <CurrencyDollarIcon />
-            </SvgIcon>
-          </Avatar>
         </Stack>
         {difference && (
           <Stack alignItems="center" direction="row" spacing={2} sx={{ mt: 2 }}>

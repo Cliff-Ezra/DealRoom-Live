@@ -96,6 +96,13 @@ const Page = () => {
                   interest: "Education",
                   strength: 87,
                 },
+                {
+                  name: "Henry Thembo",
+                  location: "Uganda",
+                  range: "$70,000 - $100,000",
+                  interest: "Education",
+                  strength: 87,
+                },
               ]}
             />
           </Stack>

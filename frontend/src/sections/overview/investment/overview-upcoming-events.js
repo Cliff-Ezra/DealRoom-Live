@@ -1,8 +1,5 @@
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
-import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
-import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
-import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 
 export const OverviewUpcomingEvents = (props) => {
   const { difference, positive = false, sx, value } = props;
@@ -17,17 +14,6 @@ export const OverviewUpcomingEvents = (props) => {
             </Typography>
             <Typography variant="h4">{value}</Typography>
           </Stack>
-          <Avatar
-            sx={{
-              backgroundColor: "primary.main",
-              height: 56,
-              width: 56,
-            }}
-          >
-            <SvgIcon>
-              <CalendarIcon />
-            </SvgIcon>
-          </Avatar>
         </Stack>
       </CardContent>
     </Card>

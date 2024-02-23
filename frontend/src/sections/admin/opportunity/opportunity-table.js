@@ -1,33 +1,37 @@
 // External imports
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
+  Badge,
   Box,
+  Button,
   Card,
+  Checkbox,
+  Dialog,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  OutlinedInput,
-  InputAdornment,
-  SvgIcon,
   TableSortLabel,
-  Button,
-  Dialog,
-  DialogContent,
-  Badge,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // Icon imports
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 // Local imports
-import { Scrollbar } from "src/components/scrollbar";
-import { ContactForm } from "src/dynamic/matches/contact-form";
-import { InvestorDetails } from "src/dynamic/matches/investor-details";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Scrollbar } from "src/components/scrollbar";
+import { OpportunityDetails } from "src/dynamic/admin/opportunity/opportunity-details";
 
 const columns = [
   { id: "name", label: "Business\u00a0Name", minWidth: 150, align: "left" },
@@ -40,18 +44,30 @@ const columns = [
   { id: "Actions", label: "Actions", minWidth: 100, align: "left" },
 ];
 
-export const OpportunityTable = ({ matches }) => {
+export const OpportunityTable = ({ listings }) => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
+  const [sector, setSector] = useState([]);
+  const [location, setLocation] = useState([]);
+  const [status, setStatus] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [filteredRows, setFilteredRows] = useState(matches);
+  const [filteredRows, setFilteredRows] = useState(listings);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const isSmallScreen = useMediaQuery("(max-width:1400px)");
+  const [anchorElActions, setAnchorElActions] = useState(null);
+
+  const [anchorElSector, setAnchorElSector] = useState(null);
+  const [anchorElLocation, setAnchorElLocation] = useState(null);
+  const [anchorElStrength, setAnchorElStrength] = useState(null);
+
+  const sectors = [...new Set(listings.map((listing) => listing.sector))];
+  const locations = [...new Set(listings.map((listing) => listing.location))];
+  const statuses = [...new Set(listings.map((listing) => listing.status))];
 
   // Function to get the value of a cell
   const getCellValue = (row, columnId) => {
@@ -89,7 +105,7 @@ export const OpportunityTable = ({ matches }) => {
     const searchValue = event.target.value.toLowerCase();
     if (searchValue === "") {
       setFilteredRows(
-        matches.slice().sort((a, b) => {
+        listings.slice().sort((a, b) => {
           if (a.id < b.id) return 1;
           if (a.id > b.id) return -1;
           return 0;
@@ -97,7 +113,7 @@ export const OpportunityTable = ({ matches }) => {
       );
     } else {
       setFilteredRows(
-        matches.filter((row) =>
+        listings.filter((row) =>
           columns.some((column) => {
             if (column.id === "action") return false;
             const cellValue = getCellValue(row, column.id);
@@ -115,7 +131,7 @@ export const OpportunityTable = ({ matches }) => {
   useEffect(() => {
     if (sortColumn === null || sortDirection === null) {
       setFilteredRows(
-        matches.slice().sort((a, b) => {
+        listings.slice().sort((a, b) => {
           if (a.id < b.id) return 1;
           if (a.id > b.id) return -1;
           return 0;
@@ -171,91 +187,152 @@ export const OpportunityTable = ({ matches }) => {
           sx={{ maxWidth: 500 }}
           onChange={handleSearchChange}
         />
-        <Box>
+        {/* Sector, Location, Funding Status */}
+        <Box sx={{ display: "flex", flexDirection: ["column", "row"], gap: 1 }}>
           <Button
             startIcon={!isSmallScreen && <AddCircleOutlineIcon />}
             variant="outlined"
             color="primary"
             sx={{ padding: "4.3px" }}
-            onClick={(event) => setAnchorElPriceRange(event.currentTarget)}
+            onClick={(event) => setAnchorElSector(event.currentTarget)}
           >
             {!isSmallScreen && (
-              <Badge
-                // badgeContent={}
-                color="success"
-              >
+              <Badge badgeContent={sector.length} color="success">
                 {" "}
                 Sector{" "}
               </Badge>
             )}
             {isSmallScreen && (
               <Typography variant="caption">
-                <Badge
-                  // badgeContent={}
-                  color="success"
-                >
+                <Badge badgeContent={sector.length} color="success">
                   {" "}
                   Sector{" "}
                 </Badge>
               </Typography>
             )}
           </Button>
+          <Menu
+            anchorEl={anchorElSector}
+            open={Boolean(anchorElSector)}
+            onClose={() => setAnchorElSector(null)}
+          >
+            {sectors.map((option) => (
+              <MenuItem key={option}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={sector.includes(option)}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setSector((prev) => [...prev, option]);
+                        } else {
+                          setSector((prev) => prev.filter((item) => item !== option));
+                        }
+                      }}
+                    />
+                  }
+                  label={option}
+                />
+              </MenuItem>
+            ))}
+            <Button onClick={() => setSector([])}>Clear filters</Button>
+          </Menu>
           <Button
             startIcon={!isSmallScreen && <AddCircleOutlineIcon />}
             variant="outlined"
             color="primary"
-            sx={{ padding: "4.3px", ml: 2 }}
-            onClick={(event) => setAnchorElPriceRange(event.currentTarget)}
+            sx={{ padding: "4.3px" }}
+            onClick={(event) => setAnchorElLocation(event.currentTarget)}
           >
             {!isSmallScreen && (
-              <Badge
-                // badgeContent={}
-                color="success"
-              >
+              <Badge badgeContent={location.length} color="success">
                 {" "}
                 Location{" "}
               </Badge>
             )}
             {isSmallScreen && (
               <Typography variant="caption">
-                <Badge
-                  // badgeContent={}
-                  color="success"
-                >
+                <Badge badgeContent={location.length} color="success">
                   {" "}
                   Location{" "}
                 </Badge>
               </Typography>
             )}
           </Button>
+          <Menu
+            anchorEl={anchorElLocation}
+            open={Boolean(anchorElLocation)}
+            onClose={() => setAnchorElLocation(null)}
+          >
+            {locations.map((option) => (
+              <MenuItem key={option}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={location.includes(option)}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setLocation((prev) => [...prev, option]);
+                        } else {
+                          setLocation((prev) => prev.filter((item) => item !== option));
+                        }
+                      }}
+                    />
+                  }
+                  label={option}
+                />
+              </MenuItem>
+            ))}
+            <Button onClick={() => setLocation([])}>Clear filters</Button>
+          </Menu>
           <Button
             startIcon={!isSmallScreen && <AddCircleOutlineIcon />}
             variant="outlined"
             color="primary"
-            sx={{ padding: "4.3px", ml: 2 }}
-            onClick={(event) => setAnchorElPriceRange(event.currentTarget)}
+            sx={{ padding: "4.3px" }}
+            onClick={(event) => setAnchorElStrength(event.currentTarget)}
           >
             {!isSmallScreen && (
-              <Badge
-                // badgeContent={}
-                color="success"
-              >
+              <Badge badgeContent={status.length} color="success">
                 {" "}
                 Funding Status{" "}
               </Badge>
             )}
             {isSmallScreen && (
               <Typography variant="caption">
-                <Badge
-                  // badgeContent={}
-                  color="success"
-                >
+                <Badge badgeContent={status.length} color="success">
                   {" "}
                   Funding Status{" "}
                 </Badge>
               </Typography>
             )}
           </Button>
+          <Menu
+            anchorEl={anchorElStrength}
+            open={Boolean(anchorElStrength)}
+            onClose={() => setAnchorElStrength(null)}
+          >
+            {statuses.map((option) => (
+              <MenuItem key={option}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={status.includes(option)}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setStatus((prev) => [...prev, option]);
+                        } else {
+                          setStatus((prev) => prev.filter((item) => item !== option));
+                        }
+                      }}
+                    />
+                  }
+                  label={option}
+                />
+              </MenuItem>
+            ))}
+            <Button onClick={() => setStatus([])}>Clear filters</Button>
+          </Menu>
         </Box>
       </Card>
 
@@ -284,63 +361,79 @@ export const OpportunityTable = ({ matches }) => {
               </TableHead>
 
               <TableBody>
-                {filteredRows.map((match) => {
-                  // Convert the last_active string to a Date object
-                  const dateObject = new Date(match.date_listed);
+                {filteredRows
+                  .filter((listing) => sector.length === 0 || sector.includes(listing.sector))
+                  .filter((listing) => location.length === 0 || location.includes(listing.location))
+                  .filter((listing) => status.length === 0 || status.includes(listing.status))
+                  .map((match) => {
+                    // Convert the last_active string to a Date object
+                    const dateObject = new Date(match.date_listed);
 
-                  // Format the date and time
-                  const date = dateObject.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  });
-                  const time = dateObject.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  });
+                    // Format the date and time
+                    const date = dateObject.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    });
+                    const time = dateObject.toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    });
 
-                  return (
-                    <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
-                      <TableCell>{match.name}</TableCell>
-                      <TableCell>{match.location}</TableCell>
-                      <TableCell
-                        sx={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          maxWidth: 200,
-                        }}
-                      >
-                        {match.description}
-                      </TableCell>
-                      <TableCell>{match.sector}</TableCell>
-                      <TableCell>{match.status}</TableCell>
-                      <TableCell>{match.sought_amount}</TableCell>
-                      <TableCell>{`${date}, ${time}`}</TableCell>
-                      <TableCell>
-                        <Box sx={{ display: "flex", flexDirection: ["column", "row"], gap: 1 }}>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ padding: "4px" }}
-                            onClick={() => setOpen(true)}
+                    return (
+                      <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
+                        <TableCell>{match.name}</TableCell>
+                        <TableCell>{match.location}</TableCell>
+                        <TableCell
+                          sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            maxWidth: 200,
+                          }}
+                        >
+                          {match.description}
+                        </TableCell>
+                        <TableCell>{match.sector}</TableCell>
+                        <TableCell>{match.status}</TableCell>
+                        <TableCell>{match.sought_amount}</TableCell>
+                        <TableCell>{`${date}, ${time}`}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={(event) => setAnchorElActions(event.currentTarget)}
                           >
-                            View
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            sx={{ padding: "4px" }}
-                            onClick={() => setOpenDetails(true)}
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
+                            id="long-menu"
+                            anchorEl={anchorElActions}
+                            open={Boolean(anchorElActions)}
+                            onClose={() => setAnchorElActions(null)}
                           >
-                            Delete
-                          </Button>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                            <MenuItem
+                              onClick={() => {
+                                setOpenDetails(true);
+                                setAnchorElActions(null);
+                              }}
+                            >
+                              View
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setAnchorElActions(null);
+                              }}
+                            >
+                              Delete
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </Box>
@@ -348,24 +441,16 @@ export const OpportunityTable = ({ matches }) => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={matches.length}
+          count={listings.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
-      {/* Contact Dialog Box */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="false">
-        <DialogContent sx={{ minWidth: "50vw" }}>
-          <ContactForm setOpen={setOpen} />
-        </DialogContent>
-      </Dialog>
       {/* Investor Details Dialog Box */}
       <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="xl">
-        <DialogContent sx={{ minWidth: "60vw" }}>
-          <InvestorDetails setOpenDetails={setOpenDetails} />
-        </DialogContent>
+        <OpportunityDetails setOpenDetails={setOpenDetails} />
       </Dialog>
     </>
   );

@@ -1,19 +1,16 @@
-import Head from "next/head";
-import withRole from "src/utils/withRole";
 import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
+import Head from "next/head";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { OverviewInvestedAmount } from "src/sections/overview/investment/overview-invested-amount";
 import { OverviewHotListings } from "src/sections/overview/investment/overview-hot-listings";
-import { OverviewNewMatches } from "src/sections/overview/investment/overview-new-matches";
-import { OverviewUpcomingEvents } from "src/sections/overview/investment/overview-upcoming-events";
 import { OverviewInteractions } from "src/sections/overview/investment/overview-interactions";
+import { OverviewInvestedAmount } from "src/sections/overview/investment/overview-invested-amount";
 import { OverviewNewBusinessMatches } from "src/sections/overview/investment/overview-new-bus-matches";
-import { OverviewInvestmentOpportunities } from "src/sections/overview/investment/overview-investment-opportunities";
-import { OverviewRecentMessages } from "src/sections/overview/investment/overview-recent-messages-table";
 import { OverviewNewListings } from "src/sections/overview/investment/overview-new-listing";
+import { OverviewNewMatches } from "src/sections/overview/investment/overview-new-matches";
 import { OverviewSectorsInterest } from "src/sections/overview/investment/overview-sectors-interest";
+import { OverviewUpcomingEvents } from "src/sections/overview/investment/overview-upcoming-events";
+import withRole from "src/utils/withRole";
 import { OverviewInvestmentEventsTable } from "/src/sections/overview/investment/overview-investment-events-table.js";
-import { Description } from "@mui/icons-material";
 
 const Page = () => (
   <>
@@ -69,55 +66,6 @@ const Page = () => (
               value="20"
             />
           </Grid>
-          {/* <Grid xs={12} md={4}>
-            <OverviewInvestmentOpportunities
-              opportunities={[
-                {
-                  id: "1",
-                  project: "Facebook",
-                  price_range: "5,761,687",
-                  asking_price: "68,412",
-                },
-                {
-                  id: "2",
-                  project: "Twitter",
-                  price_range: "698,723",
-                  asking_price: "3,842",
-                },
-                {
-                  id: "3",
-                  project: "LinkedIn",
-                  price_range: "68,412",
-                  asking_price: "13,677",
-                },
-                {
-                  id: "4",
-                  project: "Instagram",
-                  price_range: "16,716",
-                  asking_price: "5,761,687",
-                },
-                {
-                  id: "5",
-                  project: "Dribbble",
-                  price_range: "13,677",
-                  asking_price: "68,412",
-                },
-                {
-                  id: "6",
-                  project: "Behance",
-                  price_range: "9,717",
-                  asking_price: "698,723",
-                },
-                {
-                  id: "7",
-                  project: "Pinterest",
-                  price_range: "3,942",
-                  asking_price: "16,716",
-                },
-              ]}
-              sx={{ height: "100%" }}
-            />
-          </Grid> */}
           <Grid xs={12} md={8}>
             <OverviewNewBusinessMatches
               matches={[
@@ -230,43 +178,6 @@ const Page = () => (
               sx={{ height: "100%" }}
             />
           </Grid>
-          {/* <Grid xs={12} md={12}>
-            <OverviewRecentMessages
-              inquiries={[
-                {
-                  id: "3123",
-                  phone: "+256 700 000 000",
-                  name: "Ekaterina Tankova",
-                  email: "ekaterina@gmail.com",
-                  title: "Request a Quote",
-                  avatar: "/assets/avatars/avatar-anika-visser.png",
-                  date_of_inquiry: "2024-01-12T13:33:00",
-                  location: "Kampala, Uganda",
-                },
-                {
-                  id: "5112",
-                  phone: "+254 712 342 283",
-                  name: "Cao Yu",
-                  email: "cao@hotmail.com",
-                  title: "Send Capital",
-                  avatar: "/assets/avatars/avatar-alcides-antonio.png",
-                  date_of_inquiry: "2023-12-22T12:00:00",
-                  location: "Nairobi, Kenya",
-                },
-                {
-                  id: "8382",
-                  phone: "+255 712 342 283",
-                  name: "Alexa Richardson",
-                  email: "alexa@yahoo.com",
-                  title: "Send Capital",
-                  avatar: "/assets/avatars/avatar-cao-yu.png",
-                  date_of_inquiry: "2023-12-18T09:33:00",
-                  location: "Dar es Salaam, Tanzania",
-                },
-              ]}
-              sx={{ height: "100%" }}
-            />
-          </Grid> */}
         </Grid>
       </Container>
     </Box>

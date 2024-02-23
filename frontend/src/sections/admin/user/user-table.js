@@ -1,32 +1,32 @@
 // External imports
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
   Box,
   Card,
+  Dialog,
+  IconButton,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  OutlinedInput,
-  InputAdornment,
-  SvgIcon,
   TableSortLabel,
-  Button,
-  Dialog,
-  DialogContent,
-  Badge,
 } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // Icon imports
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 // Local imports
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { Scrollbar } from "src/components/scrollbar";
 import { ContactForm } from "src/dynamic/matches/contact-form";
 import { InvestorDetails } from "src/dynamic/matches/investor-details";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const columns = [
   { id: "user", label: "User\u00a0Name", minWidth: 150, align: "left" },
@@ -49,6 +49,7 @@ export const UserTable = ({ users }) => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const isSmallScreen = useMediaQuery("(max-width:1400px)");
+  const [anchorElActions, setAnchorElActions] = useState(null);
 
   // Function to get the value of a cell
   const getCellValue = (row, columnId) => {
@@ -218,13 +219,13 @@ export const UserTable = ({ users }) => {
                       <TableCell>{match.role}</TableCell>
                       <TableCell>{match.entity_type}</TableCell>
                       <TableCell>{`${date}, ${time}`}</TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <Box sx={{ display: "flex", flexDirection: ["column", "row"], gap: 1 }}>
                           <Button
                             variant="contained"
                             color="primary"
                             sx={{ padding: "4px" }}
-                            onClick={() => setOpenDetails(true)}
+                            // onClick={() => setOpenDetails(true)}
                           >
                             Edit
                           </Button>
@@ -232,11 +233,42 @@ export const UserTable = ({ users }) => {
                             variant="contained"
                             color="error"
                             sx={{ padding: "4px" }}
-                            onClick={() => setOpenDetails(true)}
+                            // onClick={() => setOpenDetails(true)}
                           >
                             Delete
                           </Button>
                         </Box>
+                      </TableCell> */}
+                      <TableCell>
+                        <IconButton
+                          aria-label="more"
+                          aria-controls="long-menu"
+                          aria-haspopup="true"
+                          onClick={(event) => setAnchorElActions(event.currentTarget)}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="long-menu"
+                          anchorEl={anchorElActions}
+                          open={Boolean(anchorElActions)}
+                          onClose={() => setAnchorElActions(null)}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            Edit
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            Delete
+                          </MenuItem>
+                        </Menu>
                       </TableCell>
                     </TableRow>
                   );
@@ -256,16 +288,12 @@ export const UserTable = ({ users }) => {
         />
       </Card>
       {/* Contact Dialog Box */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="false">
-        <DialogContent sx={{ minWidth: "50vw" }}>
-          <ContactForm setOpen={setOpen} />
-        </DialogContent>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xl">
+        <ContactForm setOpen={setOpen} />
       </Dialog>
       {/* Investor Details Dialog Box */}
       <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="xl">
-        <DialogContent sx={{ minWidth: "60vw" }}>
-          <InvestorDetails setOpenDetails={setOpenDetails} />
-        </DialogContent>
+        <InvestorDetails setOpenDetails={setOpenDetails} />
       </Dialog>
     </>
   );

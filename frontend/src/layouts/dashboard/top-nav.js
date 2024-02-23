@@ -27,31 +27,10 @@ const systemIcon = "/assets/avatars/avatar-neha-punita.png";
 const notifications = [
   {
     icon: systemIcon,
-    title: "Complete Business Sign-Up Form",
-    message: "Sign-Up your Business",
-    path: "signup/business-signup",
-    timestamp: "Jan 18, 4:56 PM",
-  },
-  {
-    icon: systemIcon,
     title: "Complete Investment Opportunity Sign-Up Form",
     message: "Register your Investment Opportunity",
     path: "signup/investment-opportunity",
     timestamp: "Jan 21, 8:02 PM",
-  },
-  {
-    icon: systemIcon,
-    title: "Add business contacts",
-    message: "Enter contacts affiliated with your business",
-    path: null,
-    timestamp: "Jan 18, 5:56 PM",
-  },
-  {
-    icon: systemIcon,
-    title: "Complete Investment Sign-Up Form",
-    message: "Register your Investment Profile",
-    path: "signup/investment-signup",
-    timestamp: "Feb 10, 8:02 PM",
   },
 ];
 

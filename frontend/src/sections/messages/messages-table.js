@@ -1,28 +1,26 @@
 // External imports
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
   Box,
   Card,
+  IconButton,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Menu,
-  MenuItem,
-  OutlinedInput,
-  InputAdornment,
-  SvgIcon,
-  TableSortLabel,
-  Button,
+  TableSortLabel
 } from "@mui/material";
-import Link from "next/link";
-import { format } from "date-fns";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // Icon imports
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 // Local imports
 import { Scrollbar } from "src/components/scrollbar";
 
@@ -42,6 +40,7 @@ export const MessagesTable = ({ messages }) => {
   const [filteredRows, setFilteredRows] = useState(messages);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const [anchorElActions, setAnchorElActions] = useState(null);
 
   // Function to get the value of a cell
   const getCellValue = (row, columnId) => {
@@ -201,13 +200,51 @@ export const MessagesTable = ({ messages }) => {
               <TableBody>
                 {messages.map((event) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={event.id}>
-                    <TableCell>{event.from}</TableCell>
-                    <TableCell>{event.subject}</TableCell>
+                    <TableCell
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: 100,
+                      }}
+                    >
+                      {event.from}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: 200,
+                      }}
+                    >
+                      {event.subject}
+                    </TableCell>
                     <TableCell>{event.date}</TableCell>
                     <TableCell>
-                      <Button variant="contained" color="primary">
-                        View
-                      </Button>
+                      <IconButton
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        onClick={(event) => setAnchorElActions(event.currentTarget)}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="long-menu"
+                        anchorEl={anchorElActions}
+                        open={Boolean(anchorElActions)}
+                        onClose={() => setAnchorElActions(null)}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            // setOpen(true);
+                            setAnchorElActions(null);
+                          }}
+                        >
+                          View
+                        </MenuItem>
+                      </Menu>
                     </TableCell>
                   </TableRow>
                 ))}

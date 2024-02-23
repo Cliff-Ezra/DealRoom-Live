@@ -47,7 +47,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <OpportunityTable
-              matches={[
+              listings={[
                 {
                   name: "Business A",
                   location: "Kigali",
@@ -64,6 +64,15 @@ const Page = () => {
                   sector: "Technology Startups",
                   status: "Seeking Funding",
                   sought_amount: "$500,000",
+                  date_listed: "2023-07-10T09:33:00",
+                },
+                {
+                  name: "Business C",
+                  location: "Uganda",
+                  description: "Housing Project",
+                  sector: "Construction",
+                  status: "Fully Funded",
+                  sought_amount: "$800,000",
                   date_listed: "2023-07-10T09:33:00",
                 },
               ]}

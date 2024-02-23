@@ -1,26 +1,34 @@
 // External imports
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
+  Badge,
   Box,
+  Button,
   Card,
+  Checkbox,
+  Dialog,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  OutlinedInput,
-  InputAdornment,
-  SvgIcon,
   TableSortLabel,
-  Button,
-  Dialog,
-  DialogContent,
+  Typography,
 } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // Icon imports
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 // Local imports
 import { Scrollbar } from "src/components/scrollbar";
 import { ContactForm } from "src/dynamic/matches/contact-form";
@@ -39,6 +47,8 @@ export const MatchesTable = ({ matches }) => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const [location, setLocation] = useState([]);
+  const [strength, setStrength] = useState([]);
   const [openDetails, setOpenDetails] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -46,6 +56,13 @@ export const MatchesTable = ({ matches }) => {
   const [filteredRows, setFilteredRows] = useState(matches);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const [anchorElActions, setAnchorElActions] = useState(null);
+
+  const [anchorElLocation, setAnchorElLocation] = useState(null);
+  const [anchorElStrength, setAnchorElStrength] = useState(null);
+
+  const locations = [...new Set(matches.map((match) => match.location))];
+  const strengths = [...new Set(matches.map((match) => match.strength))];
 
   // Function to get the value of a cell
   const getCellValue = (row, columnId) => {
@@ -146,6 +163,8 @@ export const MatchesTable = ({ matches }) => {
     setPage(0);
   };
 
+  const isSmallScreen = useMediaQuery("(max-width:1400px)");
+
   return (
     <>
       <Card sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -155,28 +174,113 @@ export const MatchesTable = ({ matches }) => {
           placeholder="Search for Investor"
           startAdornment={
             <InputAdornment position="start">
-              {" "}
               <SvgIcon color="action" fontSize="small">
-                {" "}
                 <MagnifyingGlassIcon />{" "}
-              </SvgIcon>{" "}
+              </SvgIcon>
             </InputAdornment>
           }
           sx={{ maxWidth: 500 }}
           onChange={handleSearchChange}
         />
-        <Box>
-          <Button startIcon={<AddCircleOutlineIcon />} variant="outlined" color="primary">
-            Location
-          </Button>
+        {/* Location & Strength */}
+        <Box sx={{ display: "flex", flexDirection: ["column", "row"], gap: 1 }}>
           <Button
-            startIcon={<AddCircleOutlineIcon />}
+            startIcon={!isSmallScreen && <AddCircleOutlineIcon />}
             variant="outlined"
             color="primary"
-            style={{ marginLeft: "10px" }}
+            sx={{ padding: "4.3px" }}
+            onClick={(event) => setAnchorElLocation(event.currentTarget)}
           >
-            Strength
+            {!isSmallScreen && (
+              <Badge badgeContent={location.length} color="success">
+                {" "}
+                Location{" "}
+              </Badge>
+            )}
+            {isSmallScreen && (
+              <Typography variant="caption">
+                <Badge badgeContent={location.length} color="success">
+                  {" "}
+                  Location{" "}
+                </Badge>
+              </Typography>
+            )}
           </Button>
+          <Menu
+            anchorEl={anchorElLocation}
+            open={Boolean(anchorElLocation)}
+            onClose={() => setAnchorElLocation(null)}
+          >
+            {locations.map((option) => (
+              <MenuItem key={option}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={location.includes(option)}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setLocation((prev) => [...prev, option]);
+                        } else {
+                          setLocation((prev) => prev.filter((item) => item !== option));
+                        }
+                      }}
+                    />
+                  }
+                  label={option}
+                />
+              </MenuItem>
+            ))}
+            <Button onClick={() => setLocation([])}>Clear filters</Button>
+          </Menu>
+
+          <Button
+            startIcon={!isSmallScreen && <AddCircleOutlineIcon />}
+            variant="outlined"
+            color="primary"
+            sx={{ padding: "4.3px" }}
+            onClick={(event) => setAnchorElStrength(event.currentTarget)}
+          >
+            {!isSmallScreen && (
+              <Badge badgeContent={strength.length} color="success">
+                {" "}
+                Strength{" "}
+              </Badge>
+            )}
+            {isSmallScreen && (
+              <Typography variant="caption">
+                <Badge badgeContent={strength.length} color="success">
+                  {" "}
+                  Strength{" "}
+                </Badge>
+              </Typography>
+            )}
+          </Button>
+          <Menu
+            anchorEl={anchorElStrength}
+            open={Boolean(anchorElStrength)}
+            onClose={() => setAnchorElStrength(null)}
+          >
+            {strengths.map((option) => (
+              <MenuItem key={option}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={strength.includes(option)}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setStrength((prev) => [...prev, option]);
+                        } else {
+                          setStrength((prev) => prev.filter((item) => item !== option));
+                        }
+                      }}
+                    />
+                  }
+                  label={option}
+                />
+              </MenuItem>
+            ))}
+            <Button onClick={() => setStrength([])}>Clear filters</Button>
+          </Menu>
         </Box>
       </Card>
 
@@ -205,44 +309,60 @@ export const MatchesTable = ({ matches }) => {
               </TableHead>
 
               <TableBody>
-                {filteredRows.map((match) => (
-                  <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
-                    <TableCell>{match.name}</TableCell>
-                    <TableCell>{match.location}</TableCell>
-                    <TableCell>{match.range}</TableCell>
-                    <TableCell
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        maxWidth: 200,
-                      }}
-                    >
-                      {match.interest}
-                    </TableCell>
-                    <TableCell>{match.strength}</TableCell>
-                    <TableCell>
-                      <Box sx={{ display: "flex", flexDirection: ["column", "row"], gap: 1 }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          sx={{ padding: "4px" }}
-                          onClick={() => setOpen(true)}
+                {filteredRows
+                  .filter((match) => location.length === 0 || location.includes(match.location))
+                  .filter((match) => strength.length === 0 || strength.includes(match.strength))
+                  .map((match) => (
+                    <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
+                      <TableCell>{match.name}</TableCell>
+                      <TableCell>{match.location}</TableCell>
+                      <TableCell>{match.range}</TableCell>
+                      <TableCell
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          maxWidth: 200,
+                        }}
+                      >
+                        {match.interest}
+                      </TableCell>
+                      <TableCell>{match.strength}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="more"
+                          aria-controls="long-menu"
+                          aria-haspopup="true"
+                          onClick={(event) => setAnchorElActions(event.currentTarget)}
                         >
-                          Contact
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          sx={{ padding: "4px" }}
-                          onClick={() => setOpenDetails(true)}
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="long-menu"
+                          anchorEl={anchorElActions}
+                          open={Boolean(anchorElActions)}
+                          onClose={() => setAnchorElActions(null)}
                         >
-                          More Info
-                        </Button>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <MenuItem
+                            onClick={() => {
+                              setOpen(true);
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            Contact
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setOpenDetails(true);
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            More Info
+                          </MenuItem>
+                        </Menu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </Box>
@@ -258,16 +378,12 @@ export const MatchesTable = ({ matches }) => {
         />
       </Card>
       {/* Contact Dialog Box */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="false">
-        <DialogContent sx={{ minWidth: "50vw" }}>
-          <ContactForm setOpen={setOpen} />
-        </DialogContent>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm">
+        <ContactForm setOpen={setOpen} />
       </Dialog>
       {/* Investor Details Dialog Box */}
-      <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="xl">
-        <DialogContent sx={{ minWidth: "60vw" }}>
-          <InvestorDetails setOpenDetails={setOpenDetails} />
-        </DialogContent>
+      <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="md">
+        <InvestorDetails setOpenDetails={setOpenDetails} />
       </Dialog>
     </>
   );
