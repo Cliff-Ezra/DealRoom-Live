@@ -1,9 +1,15 @@
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import dynamic from "next/dynamic";
 import { Box, Button, Container, Stack, SvgIcon, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import KanbanBoard from "src/sections/pipeline/pipeline-board";
+const KanbanBoard = dynamic(
+  () => import("src/sections/pipeline/pipeline-board").then((mod) => mod.KanbanBoard),
+  {
+    loading: () => <p>Loading ...</p>,
+  }
+);
 // import { TaskSearch } from "src/sections/tasks/tasks-search";
 
 const Page = () => {
