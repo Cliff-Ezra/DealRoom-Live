@@ -9,6 +9,7 @@ import QuestionMarkCircleIcon from "@heroicons/react/24/solid/QuestionMarkCircle
 import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import UserCircleIcon from "@heroicons/react/24/solid/UserCircleIcon";
+import RectangleStackIcon from "@heroicons/react/24/solid/RectangleStackIcon";
 import { SvgIcon } from "@mui/material";
 
 export const businessItems = [
@@ -75,6 +76,15 @@ export const investmentItems = [
     icon: (
       <SvgIcon fontSize="small">
         <UserCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "Investment Pipeline",
+    path: "/pipeline",
+    icon: (
+      <SvgIcon fontSize="small">
+        <RectangleStackIcon />
       </SvgIcon>
     ),
   },
