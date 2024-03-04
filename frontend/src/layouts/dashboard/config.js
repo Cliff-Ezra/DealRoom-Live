@@ -72,7 +72,7 @@ export const investmentItems = [
   },
   {
     title: "My Portfolio",
-    path: "#",
+    path: "/portfolio",
     icon: (
       <SvgIcon fontSize="small">
         <UserCircleIcon />

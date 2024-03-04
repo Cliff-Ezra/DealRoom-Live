@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
+import { Box, Dialog, Grid, Card, CardContent, Typography } from "@mui/material";
+import { OpportunitiesDetails } from "src/dynamic/opportunities/opportunities-details";
 
 const opportunities = [
   {
@@ -66,6 +67,7 @@ const opportunities = [
 ];
 
 export const KanbanBoard = () => {
+  const [openDetails, setOpenDetails] = useState(false);
   const [prospectingOpportunities, setProspectingOpportunities] = useState(
     opportunities.filter((opportunity) => opportunity.status === "Prospecting")
   );
@@ -176,52 +178,58 @@ export const KanbanBoard = () => {
   if (!winReady) return null;
 
   return (
-    <Box sx={{ overflowX: "auto", width: "100%" }}>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Grid container spacing={2} direction="row" sx={{ flexWrap: "nowrap" }}>
-          {["Prospecting", "Due Diligence", "Negotiation", "Funding", "Closure"].map((stage) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={stage}>
-              <h2>{stage}</h2>
-              <Droppable droppableId={stage}>
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {getSourceOpportunities(stage).map((opportunity, index) => (
-                      <Draggable
-                        key={opportunity.id}
-                        draggableId={`${opportunity.id}`}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <CardContent>
-                              <Typography variant="h5">{opportunity.title}</Typography>
-                              <Typography variant="body1">
-                                <strong>Sector: </strong>
-                                {opportunity.sector}
-                              </Typography>
-                              <Typography variant="body1">
-                                <strong>Amount Sought:</strong> {opportunity.amountSought}
-                              </Typography>
-                              <Typography variant="body1">
-                                <strong>Match:</strong> {opportunity.match}
-                              </Typography>
-                            </CardContent>
-                          </Card>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </Grid>
-          ))}
-        </Grid>
-      </DragDropContext>
-    </Box>
+    <>
+      <Box sx={{ overflowX: "auto", width: "100%" }}>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Grid container spacing={2} direction="row" sx={{ flexWrap: "nowrap" }}>
+            {["Prospecting", "Due Diligence", "Negotiation", "Funding", "Closure"].map((stage) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={stage}>
+                <h2>{stage}</h2>
+                <Droppable droppableId={stage}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {getSourceOpportunities(stage).map((opportunity, index) => (
+                        <Draggable
+                          key={opportunity.id}
+                          draggableId={`${opportunity.id}`}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => setOpenDetails(true)}
+                            >
+                              <CardContent>
+                                <Typography variant="h5">{opportunity.title}</Typography>
+                                <Typography variant="body1">
+                                  <strong>Sector: </strong> {opportunity.sector}
+                                </Typography>
+                                <Typography variant="body1">
+                                  <strong>Amount Sought:</strong> {opportunity.amountSought}
+                                </Typography>
+                                <Typography variant="body1">
+                                  <strong>Match:</strong> {opportunity.match}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </Grid>
+            ))}
+          </Grid>
+        </DragDropContext>
+      </Box>
+      {/* Pipeline Information */}
+      <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="md">
+        <OpportunitiesDetails setOpenDetails={setOpenDetails} />
+      </Dialog>
+    </>
   );
 };

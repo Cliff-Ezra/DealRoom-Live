@@ -10,7 +10,6 @@ const KanbanBoard = dynamic(
     loading: () => <p>Loading ...</p>,
   }
 );
-// import { TaskSearch } from "src/sections/tasks/tasks-search";
 
 const Page = () => {
   const router = useRouter();
@@ -23,7 +22,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Tasks & Maintenance</title>
+        <title>Opportunity Pipeline</title>
       </Head>
       <Box
         component="main"
@@ -36,7 +35,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Tasks & Maintenance</Typography>
+                <Typography variant="h4">Opportunity Pipeline</Typography>
               </Stack>
               <div>
                 <Button

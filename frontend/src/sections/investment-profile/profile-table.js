@@ -2,6 +2,7 @@
 import {
   Box,
   Card,
+  Dialog,
   IconButton,
   InputAdornment,
   Menu,
@@ -16,6 +17,7 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // Icon imports
@@ -23,24 +25,39 @@ import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 // Local imports
 import { Scrollbar } from "src/components/scrollbar";
+import { ContactForm } from "src/dynamic/matches/contact-form";
+import { InvestorDetails } from "src/dynamic/matches/investor-details";
 
 const columns = [
-  { id: "matter.Name", label: "From", minWidth: 150, align: "left" },
-  { id: "expense_category.Name", label: "Subject", minWidth: 150, align: "left" },
-  { id: "matter.Name", label: "Date", minWidth: 150, align: "left" },
+  { id: "name", label: "Business\u00a0Name", minWidth: 150, align: "left" },
+  { id: "description", label: "Description", minWidth: 150, align: "left" },
+  { id: "sector", label: "Sector", minWidth: 150, align: "left" },
+  { id: "location", label: "Location", minWidth: 150, align: "left" },
+  { id: "status", label: "Status", minWidth: 150, align: "left" },
+  { id: "Amount", label: "Amount", minWidth: 150, align: "left" },
   { id: "Actions", label: "Actions", minWidth: 100, align: "left" },
 ];
 
-export const MessagesTable = ({ messages }) => {
+export const ProfileTable = ({ matches }) => {
   const router = useRouter();
   const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [location, setLocation] = useState([]);
+  const [strength, setStrength] = useState([]);
+  const [openDetails, setOpenDetails] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [filteredRows, setFilteredRows] = useState(messages);
+  const [filteredRows, setFilteredRows] = useState(matches);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [anchorElActions, setAnchorElActions] = useState(null);
+
+  const [anchorElLocation, setAnchorElLocation] = useState(null);
+  const [anchorElStrength, setAnchorElStrength] = useState(null);
+
+  const locations = [...new Set(matches.map((match) => match.location))];
+  const strengths = [...new Set(matches.map((match) => match.strength))];
 
   // Function to get the value of a cell
   const getCellValue = (row, columnId) => {
@@ -73,18 +90,12 @@ export const MessagesTable = ({ messages }) => {
     setAnchorEl(null);
   };
 
-  // Handle view action
-  const handleView = () => {
-    router.push("/messages" + "/message-view");
-    handleMenuClose();
-  };
-
   // !Search Function
   const handleSearchChange = (event) => {
     const searchValue = event.target.value.toLowerCase();
     if (searchValue === "") {
       setFilteredRows(
-        messages.slice().sort((a, b) => {
+        matches.slice().sort((a, b) => {
           if (a.id < b.id) return 1;
           if (a.id > b.id) return -1;
           return 0;
@@ -92,11 +103,12 @@ export const MessagesTable = ({ messages }) => {
       );
     } else {
       setFilteredRows(
-        messages.filter((row) =>
+        matches.filter((row) =>
           columns.some((column) => {
-            if (column.id === "action" || row[column.id] === undefined) return false;
-            const cellValue = row[column.id].toString().toLowerCase();
-            return cellValue.includes(searchValue);
+            if (column.id === "action") return false;
+            const cellValue = getCellValue(row, column.id);
+            if (cellValue === null || cellValue === undefined) return false;
+            return cellValue.toString().toLowerCase().includes(searchValue);
           })
         )
       );
@@ -109,7 +121,7 @@ export const MessagesTable = ({ messages }) => {
   useEffect(() => {
     if (sortColumn === null || sortDirection === null) {
       setFilteredRows(
-        messages.slice().sort((a, b) => {
+        matches.slice().sort((a, b) => {
           if (a.id < b.id) return 1;
           if (a.id > b.id) return -1;
           return 0;
@@ -146,20 +158,20 @@ export const MessagesTable = ({ messages }) => {
     setPage(0);
   };
 
+  const isSmallScreen = useMediaQuery("(max-width:1400px)");
+
   return (
     <>
       <Card sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <OutlinedInput
           defaultValue=""
           fullWidth
-          placeholder="Search Message"
+          placeholder="Search for Opportunity"
           startAdornment={
             <InputAdornment position="start">
-              {" "}
               <SvgIcon color="action" fontSize="small">
-                {" "}
                 <MagnifyingGlassIcon />{" "}
-              </SvgIcon>{" "}
+              </SvgIcon>
             </InputAdornment>
           }
           sx={{ maxWidth: 500 }}
@@ -192,62 +204,61 @@ export const MessagesTable = ({ messages }) => {
               </TableHead>
 
               <TableBody>
-                {messages.map((event) => (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={event.id}
-                    onClick={handleView}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <TableCell
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        maxWidth: 100,
-                      }}
-                    >
-                      {event.from}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        maxWidth: 200,
-                      }}
-                    >
-                      {event.subject}
-                    </TableCell>
-                    <TableCell>{event.date}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="more"
-                        aria-controls="long-menu"
-                        aria-haspopup="true"
-                        onClick={(event) => setAnchorElActions(event.currentTarget)}
+                {filteredRows
+                  .filter((match) => location.length === 0 || location.includes(match.location))
+                  .filter((match) => strength.length === 0 || strength.includes(match.strength))
+                  .map((match) => (
+                    <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
+                      <TableCell>{match.name}</TableCell>
+                      <TableCell
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          maxWidth: 200,
+                        }}
                       >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        id="long-menu"
-                        anchorEl={anchorElActions}
-                        open={Boolean(anchorElActions)}
-                        onClose={() => setAnchorElActions(null)}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            handleView();
-                          }}
+                        {match.description}
+                      </TableCell>
+                      <TableCell>{match.sector}</TableCell>
+                      <TableCell>{match.location}</TableCell>
+                      <TableCell>{match.status}</TableCell>
+                      <TableCell>{match.amount}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="more"
+                          aria-controls="long-menu"
+                          aria-haspopup="true"
+                          onClick={(event) => setAnchorElActions(event.currentTarget)}
                         >
-                          View
-                        </MenuItem>
-                      </Menu>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="long-menu"
+                          anchorEl={anchorElActions}
+                          open={Boolean(anchorElActions)}
+                          onClose={() => setAnchorElActions(null)}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              // setOpen(true);
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            View Details
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              // setOpenDetails(true);
+                              setAnchorElActions(null);
+                            }}
+                          >
+                            Remove
+                          </MenuItem>
+                        </Menu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </Box>
@@ -255,13 +266,21 @@ export const MessagesTable = ({ messages }) => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={messages.length}
+          count={matches.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+      {/* Contact Dialog Box */}
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm">
+        <ContactForm setOpen={setOpen} />
+      </Dialog>
+      {/* Investor Details Dialog Box */}
+      <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="md">
+        <InvestorDetails setOpenDetails={setOpenDetails} />
+      </Dialog>
     </>
   );
 };

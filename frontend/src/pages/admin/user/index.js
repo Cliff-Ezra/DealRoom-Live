@@ -1,9 +1,11 @@
 // External imports
-import Head from "next/head";
 import dynamic from "next/dynamic";
-import { Box, Button, Container, Stack, SvgIcon, Typography } from "@mui/material";
+import Head from "next/head";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { Box, Button, Container, Dialog, Stack, SvgIcon, Typography } from "@mui/material";
 // Icon imports
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 // Local imports
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 const UserTable = dynamic(
@@ -12,8 +14,12 @@ const UserTable = dynamic(
     loading: () => <p>Loading ...</p>,
   }
 );
+import { UserForm } from "src/dynamic/admin/user/user-form";
 
 const Page = () => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <Head>
@@ -32,6 +38,26 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">User Management</Typography>
               </Stack>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: "center",
+                  "& > :not(style)": { m: 1 },
+                }}
+              >
+                <Button
+                  startIcon={
+                    <SvgIcon fontSize="small">
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                  onClick={() => setOpen(true)}
+                >
+                  Add
+                </Button>
+              </Box>
             </Stack>
             <UserTable
               users={[
@@ -68,6 +94,10 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
+      {/* Add User Dialog */}
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
+        <UserForm setOpen={setOpen} />
+      </Dialog>
     </>
   );
 };

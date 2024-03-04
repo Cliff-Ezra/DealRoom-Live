@@ -1,5 +1,6 @@
 // External imports
 import axios from "axios";
+import Select from "react-select";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -105,6 +106,41 @@ const sources = [
   { value: "Event", label: "Event" },
   { value: "Other", label: "Other" },
 ];
+
+const industries = [
+  { value: "Education", label: "Education" },
+  { value: "Construction", label: "Construction" },
+  { value: "Health", label: "Health" },
+  { value: "Finance", label: "Finance" },
+  { value: "Technology", label: "Technology" },
+  { value: "Agriculture", label: "Agriculture" },
+  { value: "Real Estate", label: "Real Estate" },
+  { value: "Manufacturing", label: "Manufacturing" },
+  { value: "Retail", label: "Retail" },
+  { value: "Hospitality and Tourism", label: "Hospitality and Tourism" },
+  { value: "Renewable Energy", label: "Renewable Energy" },
+  { value: "Transportation and Logistics", label: "Transportation and Logistics" },
+  { value: "Media and Entertainment", label: "Media and Entertainment" },
+  { value: "E-commerce", label: "E-commerce" },
+  { value: "Telecommunications", label: "Telecommunications" },
+  { value: "Biotechnology", label: "Biotechnology" },
+  { value: "Environmental Services", label: "Environmental Services" },
+  { value: "Food and Beverage", label: "Food and Beverage" },
+  { value: "Consulting", label: "Consulting" },
+  { value: "Legal Services", label: "Legal Services" },
+];
+
+// Styles for select component
+const selectStyles = {
+  control: (provided) => ({
+    ...provided,
+    minHeight: "56px",
+  }),
+  menuPortal: (provided) => ({
+    ...provided,
+    zIndex: 99999,
+  }),
+};
 
 export const InvestmentSignupForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -295,12 +331,7 @@ export const InvestmentSignupForm = () => {
 
               investment_type: "",
               geo_operation: "",
-              investment_industry: {
-                Agriculture: false,
-                Technology: false,
-                Healthcare: false,
-                Real_Estate: false,
-              },
+              investment_industry: [],
               project_type: {
                 Greenfield: false,
                 Brownfield: false,
@@ -630,60 +661,19 @@ export const InvestmentSignupForm = () => {
                         <FormLabel id="demo-checkbox-group-label">
                           Preferred Industry/Sector
                         </FormLabel>
-                        <FormGroup>
-                          <Field name="investment_industry.Agriculture" type="checkbox">
-                            {({ field, form }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={field.value}
-                                    onChange={() => form.setFieldValue(field.name, !field.value)}
-                                  />
-                                }
-                                label="Agriculture"
-                              />
-                            )}
-                          </Field>
-                          <Field name="investment_industry.Technology" type="checkbox">
-                            {({ field, form }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={field.value}
-                                    onChange={() => form.setFieldValue(field.name, !field.value)}
-                                  />
-                                }
-                                label="Technology"
-                              />
-                            )}
-                          </Field>
-                          <Field name="investment_industry.Healthcare" type="checkbox">
-                            {({ field, form }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={field.value}
-                                    onChange={() => form.setFieldValue(field.name, !field.value)}
-                                  />
-                                }
-                                label="Healthcare"
-                              />
-                            )}
-                          </Field>
-                          <Field name="investment_industry.Real Estate" type="checkbox">
-                            {({ field, form }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={field.value}
-                                    onChange={() => form.setFieldValue(field.name, !field.value)}
-                                  />
-                                }
-                                label="Real Estate"
-                              />
-                            )}
-                          </Field>
-                        </FormGroup>
+                        <Select
+                          id="industry-select"
+                          isMulti
+                          menuPortalTarget={document.body}
+                          name="investment_industry"
+                          onChange={(selectedOptions) =>
+                            setFieldValue("investment_industry", selectedOptions)
+                          }
+                          options={industries}
+                          value={values.investment_industry}
+                          placeholder="Select Industry"
+                          styles={selectStyles}
+                        />
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} md={12}>
