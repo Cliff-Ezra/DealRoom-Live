@@ -99,7 +99,7 @@ export const investmentItems = [
   },
   {
     title: "Messages",
-    path: "#",
+    path: "/messages",
     icon: (
       <SvgIcon fontSize="small">
         <EnvelopeIcon />

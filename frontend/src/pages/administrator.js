@@ -2,17 +2,17 @@ import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
 import Head from "next/head";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import withRole from "src/utils/withRole";
-import { OverviewAmountSought } from "/src/sections/overview/administrator/overview-amount-sought.js";
-import { OverviewBusinessCategory } from "/src/sections/overview/administrator/overview-business-category.js";
-import { OverviewCompletedInvestments } from "/src/sections/overview/administrator/overview-completed-investments.js";
-import { OverviewInvestmentOverTime } from "/src/sections/overview/administrator/overview-investment-over-time.js";
-import { OverviewInvestmentTypes } from "/src/sections/overview/administrator/overview-investment-types.js";
-import { OverviewNumberInvestments } from "/src/sections/overview/administrator/overview-number-investment.js";
-import { OverviewPreferredSector } from "/src/sections/overview/administrator/overview-preferred-sector.js";
-import { OverviewRegisteredInvestors } from "/src/sections/overview/administrator/overview-registered-investors.js";
-import { OverviewSeekingFunding } from "/src/sections/overview/administrator/overview-seeking-funding.js";
-import { OverviewTotalInvested } from "/src/sections/overview/administrator/overview-total-investment.js";
-import { OverviewTrendingSector } from "/src/sections/overview/administrator/overview-trending-sector.js";
+import { OverviewAmountSought } from "src/sections/overview/administrator/overview-amount-sought.js";
+import { OverviewBusinessCategory } from "src/sections/overview/administrator/overview-business-category.js";
+import { OverviewCompletedInvestments } from "src/sections/overview/administrator/overview-completed-investments.js";
+import { OverviewInvestmentOverTime } from "src/sections/overview/administrator/overview-investment-over-time.js";
+import { OverviewInvestmentTypes } from "src/sections/overview/administrator/overview-investment-types.js";
+import { OverviewNumberInvestments } from "src/sections/overview/administrator/overview-number-investment.js";
+import { OverviewPreferredSector } from "src/sections/overview/administrator/overview-preferred-sector.js";
+import { OverviewRegisteredInvestors } from "src/sections/overview/administrator/overview-registered-investors.js";
+import { OverviewSeekingFunding } from "src/sections/overview/administrator/overview-seeking-funding.js";
+import { OverviewTotalInvested } from "src/sections/overview/administrator/overview-total-investment.js";
+import { OverviewTrendingSector } from "src/sections/overview/administrator/overview-trending-sector.js";
 
 const Page = () => (
   <>

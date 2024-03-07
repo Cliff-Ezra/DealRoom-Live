@@ -195,7 +195,7 @@ export const MessagesTable = ({ messages }) => {
                 {messages.map((event) => (
                   <TableRow
                     hover
-                    role="checkbox"
+                    type="checkbox"
                     tabIndex={-1}
                     key={event.id}
                     onClick={handleView}

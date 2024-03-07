@@ -20,7 +20,7 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -95,6 +95,10 @@ export const ProfileTable = ({ profiles }) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleView = () => {
+    setOpenDetails(true);
   };
 
   // !Search Function
@@ -330,7 +334,14 @@ export const ProfileTable = ({ profiles }) => {
                     });
 
                     return (
-                      <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
+                      <TableRow
+                        hover
+                        type="checkbox"
+                        tabIndex={-1}
+                        key={match.id}
+                        onClick={handleView}
+                        style={{ cursor: "pointer" }}
+                      >
                         <TableCell>{match.name}</TableCell>
                         <TableCell>{match.location}</TableCell>
                         <TableCell>{match.range}</TableCell>

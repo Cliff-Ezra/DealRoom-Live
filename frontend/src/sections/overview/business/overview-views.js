@@ -7,7 +7,7 @@ export const OverviewViews = (props) => {
   const { difference, positive = false, sx, value } = props;
 
   return (
-    <Card sx={sx}>
+    <Card sx={{ sx, backgroundColor: "#f5f5f5" }}>
       <CardContent>
         <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>

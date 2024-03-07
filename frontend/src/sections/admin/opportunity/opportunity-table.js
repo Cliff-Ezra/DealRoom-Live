@@ -100,6 +100,10 @@ export const OpportunityTable = ({ listings }) => {
     setAnchorEl(null);
   };
 
+  const handleView = () => {
+    setOpenDetails(true);
+  };
+
   // !Search Function
   const handleSearchChange = (event) => {
     const searchValue = event.target.value.toLowerCase();
@@ -382,7 +386,14 @@ export const OpportunityTable = ({ listings }) => {
                     });
 
                     return (
-                      <TableRow hover type="checkbox" tabIndex={-1} key={match.id}>
+                      <TableRow
+                        hover
+                        type="checkbox"
+                        tabIndex={-1}
+                        key={match.id}
+                        onClick={handleView}
+                        style={{ cursor: "pointer" }}
+                      >
                         <TableCell>{match.name}</TableCell>
                         <TableCell>{match.location}</TableCell>
                         <TableCell

@@ -51,19 +51,19 @@ const Page = () => (
             />
           </Grid>
           <Grid xs={12} sm={6} lg={2.4}>
-            <OverviewUpcomingEvents
-              difference={16}
-              positive={false}
-              sx={{ height: "100%" }}
-              value="2"
-            />
-          </Grid>
-          <Grid xs={12} sm={6} lg={2.4}>
             <OverviewInteractions
               difference={16}
               positive={true}
               sx={{ height: "100%" }}
               value="20"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} lg={2.4}>
+            <OverviewUpcomingEvents
+              difference={16}
+              positive={false}
+              sx={{ height: "100%" }}
+              value="2"
             />
           </Grid>
           <Grid xs={12} md={8}>
